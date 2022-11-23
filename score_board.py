@@ -4,11 +4,11 @@ from PyQt6.QtCore import pyqtSlot
 class ScoreBoard(QWidget):
     '''# base the score_board on a QDockWidget'''
 
-    def __init__(self):
+    def __init__(self, board):
         super().__init__()
-        self.initUI()
+        self.initUI(board)
 
-    def initUI(self):
+    def initUI(self, board):
         '''initiates ScoreBoard UI'''
         self.resize(200, 200)
         self.center()
@@ -21,6 +21,7 @@ class ScoreBoard(QWidget):
         self.label_timeRemaining = QLabel("Time remaining: ")
         self.mainLayout.addWidget(self.label_clickLocation)
         self.mainLayout.addWidget(self.label_timeRemaining)
+        self.make_connection(board)
         self.setLayout(self.mainLayout)
         self.show()
 

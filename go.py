@@ -28,7 +28,7 @@ class Go(QMainWindow):
     def initUI(self):
         '''initiates application UI'''
         self.board = Board(self)
-        self.scoreBoard = ScoreBoard()
+        self.scoreBoard = ScoreBoard(self.board)
 
         self.setCentralWidget(Layout(self.board, self.scoreBoard))
 
