@@ -20,17 +20,11 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def initBoard(self):
         '''initiates board'''
-        self.timer = QBasicTimer()  # create a timer for the game
-        self.isStarted = False      # game is not currently started
-        self.start()                # start the game which will start the timer
+        #self.timer = QBasicTimer()  # create a timer for the game
+        #self.isStarted = False      # game is not currently started
+        #self.start()                # start the game which will start the timer
 
-        self.boardArray =[]         # TODO - create a 2d int/Piece array to store the state of the game
-        # self.printBoardArray()    # TODO - uncomment this method after creating the array above
 
-    def printBoardArray(self):
-        '''prints the boardArray in an attractive way'''
-        print("boardArray:")
-        print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in self.boardArray]))
 
     def mousePosToColRow(self, event):
         '''convert the mouse click event to a row and column'''
@@ -80,8 +74,6 @@ class Board(QFrame):  # base the board on a QFrame widget
         '''clears pieces from the board'''
         # TODO write code to reset game
 
-    def tryMove(self, newX, newY):
-        '''tries to move a piece'''
 
     def drawBoardSquares(self, painter):
         '''draw all the square on the board'''

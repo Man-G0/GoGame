@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDockWidget, QVBoxLayout, QWidget, QLabel #TODO import additional Widget classes as desired
 from PyQt6.QtCore import pyqtSlot
 
-class ScoreBoard(QDockWidget):
+class ScoreBoard(QWidget):
     '''# base the score_board on a QDockWidget'''
 
     def __init__(self):
@@ -14,16 +14,14 @@ class ScoreBoard(QDockWidget):
         self.center()
         self.setWindowTitle('ScoreBoard')
         #create a widget to hold other widgets
-        self.mainWidget = QWidget()
         self.mainLayout = QVBoxLayout()
 
         #create two labels which will be updated by signals
         self.label_clickLocation = QLabel("Click Location: ")
         self.label_timeRemaining = QLabel("Time remaining: ")
-        self.mainWidget.setLayout(self.mainLayout)
         self.mainLayout.addWidget(self.label_clickLocation)
         self.mainLayout.addWidget(self.label_timeRemaining)
-        self.setWidget(self.mainWidget)
+        self.setLayout(self.mainLayout)
         self.show()
 
     def center(self):

@@ -1,13 +1,23 @@
-from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 from board import Board
+from game_logic import GameLogic
 from score_board import ScoreBoard
 
 class Go(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.initLogic()
         self.initUI()
+
+    def initLogic(self):
+        self.logic = GameLogic()
+        self.logic.addPiece('w', 2, 5)
+        self.logic.addPiece('b', 3, 5)
+        self.logic.addPiece('w', 2, 6)
+        self.logic.printPiecesArray()
+
 
     def getBoard(self):
         return self.board
@@ -18,12 +28,11 @@ class Go(QMainWindow):
     def initUI(self):
         '''initiates application UI'''
         self.board = Board(self)
-        self.setCentralWidget(self.board)
         self.scoreBoard = ScoreBoard()
-        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.scoreBoard)
-        self.scoreBoard.make_connection(self.board)
 
-        self.resize(800, 800)
+        self.setCentralWidget(Layout(self.board, self.scoreBoard))
+
+        self.resize(800, 600)
         self.center()
         self.setWindowTitle('Go')
         self.show()
@@ -37,3 +46,12 @@ class Go(QMainWindow):
         self.move(gr.topLeft())
         #size = self.geometry()
         #self.move((screen.width() - size.width()) / 2,(screen.height() - size.height()) / 2)
+
+
+class Layout(QWidget):
+    def __init__(self, board, scoreBoard):
+        super().__init__()
+        hbox = QHBoxLayout()
+        hbox.addWidget(board, 2)
+        hbox.addWidget(scoreBoard, 1)
+        self.setLayout(hbox)
