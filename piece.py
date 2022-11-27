@@ -10,3 +10,4 @@ class Piece(object):
 
     def setLiberties(self, liberties):  # set Liberties
         self.liberties = liberties
+
