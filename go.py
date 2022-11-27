@@ -4,6 +4,7 @@ from board import Board
 from game_logic import GameLogic
 from score_board import ScoreBoard
 
+
 class Go(QMainWindow):
 
     def __init__(self):
@@ -13,11 +14,12 @@ class Go(QMainWindow):
 
     def initLogic(self):
         self.logic = GameLogic()
-        self.logic.addPiece('w', 2, 5)
-        self.logic.addPiece('b', 3, 5)
-        self.logic.addPiece('w', 2, 6)
+        self.logic.addPiece('W', 2, 5)
+        self.logic.addPiece('B', 3, 5)
+        self.logic.addPiece('W', 2, 6)
         self.logic.printPiecesArray()
-
+        self.logic.calcLiberties()
+        self.logic.printLibertiesArray()
 
     def getBoard(self):
         return self.board
