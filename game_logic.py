@@ -25,7 +25,7 @@ class GameLogic:
                     aLine += " W |"
                 elif self.piecesArray[i][j].color == 'B':
                     aLine += " B |"
-                else :
+                else:
                     aLine += " X |"
             print(aLine)
             aLine = "-"
@@ -63,7 +63,9 @@ class GameLogic:
                     if pieceCheck.group == 0:
                         group += 1
                         pieceCheck.findLiberties(group, self.xSize, self.ySize, self.piecesArray)
+
         groupLiberties=[0]*group
+
         for i in range(self.xSize):
             for j in range(self.ySize):
                 pieceCheck = self.piecesArray[i][j]
