@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import QDockWidget, QVBoxLayout, QWidget, QLabel #TODO import additional Widget classes as desired
 from PyQt6.QtCore import pyqtSlot
+#from go import Go
+
 
 class ScoreBoard(QWidget):
     '''# base the score_board on a QDockWidget'''
@@ -13,7 +15,10 @@ class ScoreBoard(QWidget):
         self.resize(200, 200)
         self.center()
         self.setWindowTitle('ScoreBoard')
+
+        #self.go = Go()
         #create a widget to hold other widgets
+        self.mainLayout = QVBoxLayout()
         self.mainLayout = QVBoxLayout()
 
         #create two labels which will be updated by signals
@@ -27,6 +32,7 @@ class ScoreBoard(QWidget):
 
     def center(self):
         '''centers the window on the screen, you do not need to implement this method'''
+        #self.go.center()
 
     def make_connection(self, board):
         '''this handles a signal sent from the board class'''
@@ -40,6 +46,7 @@ class ScoreBoard(QWidget):
         '''updates the label to show the click location'''
         self.label_clickLocation.setText("Click Location:" + clickLoc)
         print('slot ' + clickLoc)
+        self.center()
 
     @pyqtSlot(int)
     def setTimeRemaining(self, timeRemainng):

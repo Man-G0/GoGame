@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QPoint
 from board import Board
 from game_logic import GameLogic
 from score_board import ScoreBoard
@@ -34,7 +34,7 @@ class Go(QMainWindow):
 
         self.setCentralWidget(Layout(self.board, self.scoreBoard))
 
-        self.resize(800, 600)
+        self.resize(800,750)
         self.center()
         self.setWindowTitle('Go')
         self.show()
@@ -45,9 +45,16 @@ class Go(QMainWindow):
         screen = self.screen().availableGeometry().center()
 
         gr.moveCenter(screen)
-        self.move(gr.topLeft())
-        #size = self.geometry()
-        #self.move((screen.width() - size.width()) / 2,(screen.height() - size.height()) / 2)
+
+        size = self.geometry()
+        self.move(int(screen.x() - size.width()/2), int(screen.y() - size.height()/2))
+        print(size.width()/2)
+        print(screen.x())
+
+        print(size.height()/2)
+        print(screen.y())
+        #self.move(int((screen.x() - size.x()) / 2),int((screen.y() - size.y()) / 2))
+
 
 
 class Layout(QWidget):
