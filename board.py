@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QFrame
+from PyQt6.QtWidgets import QFrame, QWidget, QVBoxLayout, QLabel, QGridLayout
 from PyQt6.QtCore import Qt, QBasicTimer, pyqtSignal, QPointF
-from PyQt6.QtGui import QPainter
+from PyQt6.QtGui import QPainter, QPixmap
 from PyQt6.QtTest import QTest
 from piece import Piece
 
@@ -9,8 +9,8 @@ class Board(QFrame):  # base the board on a QFrame widget
     clickLocationSignal = pyqtSignal(str) # signal sent when there is a new click location
 
     # TODO set the board width and height to be square
-    boardWidth  = 0     # board is 0 squares wide # TODO this needs updating
-    boardHeight = 0     #
+    boardWidth  = 50     # board is 0 squares wide # TODO this needs updating
+    boardHeight = 50     #
     timerSpeed  = 1     # the timer updates every 1 millisecond
     counter     = 10    # the number the counter will count down from
 
@@ -23,6 +23,50 @@ class Board(QFrame):  # base the board on a QFrame widget
         #self.timer = QBasicTimer()  # create a timer for the game
         #self.isStarted = False      # game is not currently started
         #self.start()                # start the game which will start the timer
+        self.board = QWidget()
+        #self.setStyleSheet("background-color: E0BD6B")
+        boardImage = QPixmap("board-19x19.jpg")
+        self.boardWidth = boardImage.width()
+        self.boardHeight = boardImage.height()
+        print("w: "+ str(self.boardWidth)+", h: "+str(self.boardHeight))
+        self.setFixedSize(self.boardWidth, self.boardHeight)
+        self.boardGridLayout = QGridLayout()
+
+        self.boardLayout = QVBoxLayout()
+
+
+        whiteStone = QPixmap("WhiteStone.png")
+        blackStone = QPixmap("BlackStone.png")
+        empty = QPixmap("Empty.png")
+
+        self.whiteQlabel = QLabel()
+        self.whiteQlabel.setPixmap(whiteStone)
+        self.boardLayout.addWidget(self.whiteQlabel)
+        #self.whiteQlabel.setStyleSheet("background-image: url(Empty.png)")
+
+        self.blackQlabel = QLabel()
+        self.blackQlabel.setPixmap(blackStone)
+        self.boardLayout.addWidget(self.blackQlabel)
+        self.blackQlabel.setStyleSheet("background-image: url(Empty.png)")
+
+        self.emptyQlabel = QLabel()
+        self.emptyQlabel.setPixmap(empty)
+        self.boardLayout.addWidget(self.emptyQlabel)
+        self.emptyQlabel.setStyleSheet("background-image: url(Empty.png)")
+
+        """for i in range (0,6):
+            for j in range(0,6):
+                self.boardGridLayout.addWidget(self.blackQlabel,i,j)"""
+
+        #self.boardGridLayout.addWidget(self.blackQlabel, 0, 1)
+        #self.boardGridLayout.addWidget(self.whiteQlabel, 0, 1)
+        self.setLayout(self.boardLayout)
+
+        #self.setLayout(self.boardLayout)
+
+
+
+
 
 
 
@@ -59,9 +103,9 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def paintEvent(self, event):
         '''paints the board and the pieces of the game'''
-        # painter = QPainter(self)
-        # self.drawBoardSquares(painter)
-        # self.drawPieces(painter)
+        painter = QPainter(self)
+        self.drawBoardSquares(painter)
+        self.drawPieces(painter)
 
     def mousePressEvent(self, event):
         '''this event is automatically called when the mouse is pressed'''
