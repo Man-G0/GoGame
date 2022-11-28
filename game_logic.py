@@ -9,13 +9,12 @@ class GameLogic:
         for i in range(self.xSize):
             yArray = [None]*self.ySize
             self.piecesArray.append(yArray)
-        print("Game Logic Object Created")
 
     def printPiecesArray(self):
         for i in range(self.xSize):
-            aLine = "-"
+            aLine = "+"
             for j in range(self.ySize):
-                aLine += "----"
+                aLine += "---+"
             print(aLine)
             aLine = "|"
             for j in range(self.ySize):
@@ -28,16 +27,16 @@ class GameLogic:
                 else:
                     aLine += " X |"
             print(aLine)
-            aLine = "-"
+            aLine = "+"
         for j in range(self.ySize):
-            aLine += "----"
+            aLine += "---+"
         print(aLine)
 
     def printLibertiesArray(self):
         for i in range(self.xSize):
-            aLine = "-"
+            aLine = "+"
             for j in range(self.ySize):
-                aLine += "----"
+                aLine += "---+"
             print(aLine)
             aLine = "|"
             for j in range(self.ySize):
@@ -46,9 +45,9 @@ class GameLogic:
                 else:
                     aLine += " " + str(self.piecesArray[i][j].liberties) + " |"
             print(aLine)
-            aLine = "-"
+            aLine = "+"
         for j in range(self.ySize):
-            aLine += "----"
+            aLine += "---+"
         print(aLine)
 
     def addPiece(self, color, x, y):
