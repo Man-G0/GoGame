@@ -63,15 +63,10 @@ class Go(QMainWindow):
         screen = self.screen().availableGeometry().center()
 
         gr.moveCenter(screen)
+        self.move(gr.topLeft())
+        """size = self.geometry()
+        self.move(int(screen.x() - size.width()/2), int(screen.y() - size.height()/2))"""
 
-        size = self.geometry()
-        self.move(int(screen.x() - size.width()/2), int(screen.y() - size.height()/2))
-        print(size.width()/2)
-        print(screen.x())
-
-        print(size.height()/2)
-        print(screen.y())
-        #self.move(int((screen.x() - size.x()) / 2),int((screen.y() - size.y()) / 2))
 
 
 
