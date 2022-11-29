@@ -6,6 +6,8 @@ class GameLogic:
         self.xSize = 9
         self.ySize = 9
         self.piecesArray = []
+        self.bCaptured = []
+        self.wCaptured = []
         for i in range(self.xSize):
             yArray = [None]*self.ySize
             self.piecesArray.append(yArray)
@@ -76,3 +78,10 @@ class GameLogic:
                 pieceCheck = self.piecesArray[i][j]
                 if pieceCheck is not None:
                     pieceCheck.liberties = groupLiberties[pieceCheck.group-1]
+                    if pieceCheck.liberties == 0 and pieceCheck.color == "W":
+                        self.wCaptured.append(pieceCheck)
+                        self.piecesArray[i][j] = None
+                    elif pieceCheck.liberties == 0 and pieceCheck.color == "B":
+                        self.bCaptured.append(pieceCheck)
+                        self.piecesArray[i][j] = None
+
