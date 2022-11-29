@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QFrame, QWidget, QVBoxLayout, QLabel, QGridLayout
-from PyQt6.QtCore import Qt, QBasicTimer, pyqtSignal, QPointF
-from PyQt6.QtGui import QPainter, QPixmap
+from PyQt6.QtCore import Qt, QBasicTimer, pyqtSignal, QPointF, QPoint, QRect
+from PyQt6.QtGui import QPainter, QPixmap, QColor
 from PyQt6.QtTest import QTest
 from piece import Piece
 
@@ -8,9 +8,8 @@ class Board(QFrame):  # base the board on a QFrame widget
     updateTimerSignal = pyqtSignal(int) # signal sent when timer is updated
     clickLocationSignal = pyqtSignal(str) # signal sent when there is a new click location
 
-    # TODO set the board width and height to be square
-    boardWidth  = 50     # board is 0 squares wide # TODO this needs updating
-    boardHeight = 50     #
+    boardWidth  = 7    # board is 7 squares wide
+    boardHeight = 7     # board is 7 squares high
     timerSpeed  = 1     # the timer updates every 1 millisecond
     counter     = 10    # the number the counter will count down from
 
@@ -23,13 +22,12 @@ class Board(QFrame):  # base the board on a QFrame widget
         #self.timer = QBasicTimer()  # create a timer for the game
         #self.isStarted = False      # game is not currently started
         #self.start()                # start the game which will start the timer
-        self.board = QWidget()
-        #self.setStyleSheet("background-color: E0BD6B")
+        self.setStyleSheet("background-color: #E0BD6B")
         boardImage = QPixmap("board-19x19.jpg")
-        self.boardWidth = boardImage.width()
+        """self.boardWidth = boardImage.width()
         self.boardHeight = boardImage.height()
-        print("w: "+ str(self.boardWidth)+", h: "+str(self.boardHeight))
-        self.setFixedSize(self.boardWidth, self.boardHeight)
+        print("w: "+ str(self.boardWidth)+", h: "+str(self.boardHeight))"""
+        self.setFixedSize(800, 800)
         self.boardGridLayout = QGridLayout()
 
         self.boardLayout = QVBoxLayout()
@@ -42,7 +40,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.whiteQlabel = QLabel()
         self.whiteQlabel.setPixmap(whiteStone)
         self.boardLayout.addWidget(self.whiteQlabel)
-        #self.whiteQlabel.setStyleSheet("background-image: url(Empty.png)")
+        self.whiteQlabel.setStyleSheet("background-image: url(Empty.png)")
 
         self.blackQlabel = QLabel()
         self.blackQlabel.setPixmap(blackStone)
@@ -75,7 +73,7 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def squareWidth(self):
         '''returns the width of one square in the board'''
-        return self.contentsRect().width() / self.boardWidth
+        return self.boardWidth/self.contentsRect().width()
 
     def squareHeight(self):
         '''returns the height of one square of the board'''
@@ -105,7 +103,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         '''paints the board and the pieces of the game'''
         painter = QPainter(self)
         self.drawBoardSquares(painter)
-        self.drawPieces(painter)
+        #self.drawPieces(painter)
 
     def mousePressEvent(self, event):
         '''this event is automatically called when the mouse is pressed'''
@@ -121,16 +119,19 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def drawBoardSquares(self, painter):
         '''draw all the square on the board'''
-        # TODO set the default colour of the brush
+        self.brushSize = 3
+        self.brushColor = Qt.GlobalColor.black
         for row in range(0, Board.boardHeight):
             for col in range (0, Board.boardWidth):
                 painter.save()
+                print("square width: "+ str(self.squareWidth()))
+                print("square Height: " + str(self.squareHeight()))
                 colTransformation = self.squareWidth()* col # TODO set this value equal the transformation in the column direction
-                rowTransformation = 0                       # TODO set this value equal the transformation in the row direction
+                rowTransformation = self.squareHeight()* row                      # TODO set this value equal the transformation in the row direction
                 painter.translate(colTransformation,rowTransformation)
-                painter.fillRect()                          # TODO provide the required arguments
+                painter.fillRect(QRect(int(colTransformation),int(rowTransformation),int(self.squareWidth()),int(self.squareHeight())),QColor(0,0,0))
                 painter.restore()
-                # TODO change the colour of the brush so that a checkered board is drawn
+                self.brushColor = Qt.GlobalColor.black
 
     def drawPieces(self, painter):
         '''draw the prices on the board'''
