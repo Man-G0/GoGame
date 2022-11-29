@@ -17,9 +17,20 @@ class Go(QMainWindow):
         self.logic.addPiece('W', 2, 5)
         self.logic.addPiece('B', 3, 5)
         self.logic.addPiece('W', 2, 6)
+        self.logic.addPiece('W', 1, 1)
+        #self.logic.addPiece('W', 1, 2)
+        self.logic.addPiece('B', 1, 0)
+        self.logic.addPiece('B', 0, 0)
+        self.logic.addPiece('B', 0, 1)
+        self.logic.addPiece('B', 0, 2)
+        self.logic.addPiece('B', 2, 1)
+        self.logic.addPiece('B', 2, 2)
+        self.logic.addPiece('B', 1, 3)
         self.logic.printPiecesArray()
         self.logic.calcLiberties()
         self.logic.printLibertiesArray()
+        self.logic.printPiecesArray()
+        self.logic.printPayable(self.logic.findBPlayable())
 
     def getBoard(self):
         return self.board
