@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout
-from PyQt6.QtCore import Qt, QPoint
+from PyQt6.QtCore import Qt, QPoint, QSize
+from PyQt6.QtGui import QCursor, QPixmap
 from board import Board
 from game_logic import GameLogic
 from score_board import ScoreBoard
@@ -40,8 +41,14 @@ class Go(QMainWindow):
 
     def initUI(self):
         '''initiates application UI'''
+        self.cursor_pix = QPixmap('WhiteStone.png')
+        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(40, 40))
+        self.current_cursor = QCursor(self.cursor_scaled_pix, -1, -1)
+
+
         self.board = Board(self)
         self.scoreBoard = ScoreBoard(self.board)
+        self.board.setCursor(self.current_cursor)
 
         self.setCentralWidget(Layout(self.board, self.scoreBoard))
 

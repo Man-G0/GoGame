@@ -93,7 +93,6 @@ class GameLogic:
                         pieceCheck.findLiberties(group, self.xSize, self.ySize, array)
 
         groupLiberties=[0]*group
-        print(group)
 
         for i in range(self.xSize):
             for j in range(self.ySize):
@@ -151,7 +150,6 @@ class GameLogic:
                             pieceCheck = self.duplicatedArray[m][n]
                             if pieceCheck is not None:
                                 if pieceCheck.liberties == 0 and pieceCheck.color == color:
-                                    print(pieceCheck.color)
                                     playable = False
                     playableArray[i][j] = playable
 
