@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QFrame, QWidget, QVBoxLayout, QLabel, QGridLayout
 from PyQt6.QtCore import Qt, QBasicTimer, pyqtSignal, QPointF, QPoint, QRect
-from PyQt6.QtGui import QPainter, QPixmap, QColor
+from PyQt6.QtGui import QPainter, QPixmap, QColor, QPen
 from PyQt6.QtTest import QTest
 from piece import Piece
 
@@ -22,12 +22,12 @@ class Board(QFrame):  # base the board on a QFrame widget
         #self.timer = QBasicTimer()  # create a timer for the game
         #self.isStarted = False      # game is not currently started
         #self.start()                # start the game which will start the timer
-        self.setStyleSheet("background-color: #E0BD6B")
+        #self.setStyleSheet("background-color: #E0BD6B")
         boardImage = QPixmap("board-19x19.jpg")
         """self.boardWidth = boardImage.width()
         self.boardHeight = boardImage.height()
         print("w: "+ str(self.boardWidth)+", h: "+str(self.boardHeight))"""
-        self.setFixedSize(800, 800)
+        self.setMinimumSize(300, 300)
         self.boardGridLayout = QGridLayout()
 
         self.boardLayout = QVBoxLayout()
@@ -52,10 +52,6 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.boardLayout.addWidget(self.emptyQlabel)
         self.emptyQlabel.setStyleSheet("background-image: url(Empty.png)")
 
-        """for i in range (0,6):
-            for j in range(0,6):
-                self.boardGridLayout.addWidget(self.blackQlabel,i,j)"""
-
         #self.boardGridLayout.addWidget(self.blackQlabel, 0, 1)
         #self.boardGridLayout.addWidget(self.whiteQlabel, 0, 1)
         self.setLayout(self.boardLayout)
@@ -73,11 +69,11 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def squareWidth(self):
         '''returns the width of one square in the board'''
-        return self.boardWidth/self.contentsRect().width()
+        return (self.contentsRect().width()-20)/self.boardWidth
 
     def squareHeight(self):
         '''returns the height of one square of the board'''
-        return self.contentsRect().height() / self.boardHeight
+        return (self.contentsRect().height()-20) / self.boardHeight
 
     def start(self):
         '''starts game'''
@@ -121,17 +117,20 @@ class Board(QFrame):  # base the board on a QFrame widget
         '''draw all the square on the board'''
         self.brushSize = 3
         self.brushColor = Qt.GlobalColor.black
+        painter.setPen(QPen(self.brushColor, self.brushSize))
+        if self.squareWidth()<=self.squareHeight():
+            squareSide = self.squareWidth()
+        else:
+            squareSide = self.squareHeight()
         for row in range(0, Board.boardHeight):
             for col in range (0, Board.boardWidth):
                 painter.save()
-                print("square width: "+ str(self.squareWidth()))
-                print("square Height: " + str(self.squareHeight()))
-                colTransformation = self.squareWidth()* col # TODO set this value equal the transformation in the column direction
-                rowTransformation = self.squareHeight()* row                      # TODO set this value equal the transformation in the row direction
-                painter.translate(colTransformation,rowTransformation)
-                painter.fillRect(QRect(int(colTransformation),int(rowTransformation),int(self.squareWidth()),int(self.squareHeight())),QColor(0,0,0))
+                colTransformation = squareSide* col # TODO set this value equal the transformation in the column direction
+                rowTransformation = squareSide* row                   # TODO set this value equal the transformation in the row direction
+                painter.fillRect(QRect(int(colTransformation),int(rowTransformation),int(squareSide),int(squareSide)),QColor("#E0BD6B"))
+                painter.drawRect(QRect(int(colTransformation),int(rowTransformation),int(squareSide),int(squareSide)))
                 painter.restore()
-                self.brushColor = Qt.GlobalColor.black
+                self.brushColor = QColor("#E0BD6B")
 
     def drawPieces(self, painter):
         '''draw the prices on the board'''
