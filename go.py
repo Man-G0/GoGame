@@ -43,12 +43,14 @@ class Go(QMainWindow):
         '''initiates application UI'''
         self.cursor_pix = QPixmap('WhiteStone.png')
         self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(40, 40))
-        self.current_cursor = QCursor(self.cursor_scaled_pix, -1, -1)
-
+        self.cursor_white = QCursor(self.cursor_scaled_pix, -1, -1)
+        self.cursor_pix = QPixmap('BlackStone.png')
+        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(40, 40))
+        self.cursor_black = QCursor(self.cursor_scaled_pix, -1, -1)
 
         self.board = Board(self)
         self.scoreBoard = ScoreBoard(self.board)
-        self.board.setCursor(self.current_cursor)
+        self.board.setCursor(self.cursor_black)
 
         self.setCentralWidget(Layout(self.board, self.scoreBoard))
 
