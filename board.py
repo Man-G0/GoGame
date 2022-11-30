@@ -82,6 +82,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         '''paints the board and the pieces of the game'''
         painter = QPainter(self)
         self.drawBoardSquares(painter)
+        self.playablePosition(painter)
         self.drawPieces(painter)
 
     def mousePressEvent(self, event):
@@ -114,12 +115,38 @@ class Board(QFrame):  # base the board on a QFrame widget
 
 
         painter = QPainter()
+        self.playablePosition(painter)
         self.drawPieces(painter)
         self.clickLocationSignal.emit(clickLoc)
 
     def resetGame(self):
         '''clears pieces from the board'''
         # TODO write code to reset game
+
+    def playablePosition(self,painter):
+
+        if self.logic.currentPlayer == "W":
+            self.listPlayable = self.logic.findWPlayable()
+            self.logic.printPayable(self.listPlayable)
+        elif self.logic.currentPlayer == "B":
+            self.listPlayable = self.logic.findBPlayable()
+            self.logic.printPayable(self.listPlayable)
+
+        if self.squareWidth()<=self.squareHeight():
+            squareSide = self.squareWidth()
+        else:
+            squareSide = self.squareHeight()
+
+        for col in range(0, Board.boardWidth + 1):
+            for row in range(0, Board.boardHeight + 1):
+                if self.listPlayable[col][row]:
+                    self.brushSize = 20
+                    self.brushColor = Qt.GlobalColor.green
+                    painter.setPen(QPen(self.brushColor, self.brushSize))
+                    colTransformation = squareSide * 0.44 + squareSide * col
+                    rowTransformation = squareSide * 0.44 + squareSide * row
+                    painter.drawEllipse(int(colTransformation), int(rowTransformation), 5,
+                                      5)
 
 
     def drawBoardSquares(self, painter):
