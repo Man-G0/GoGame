@@ -75,6 +75,8 @@ class GameLogic:
     def addPiece(self, color, x, y):
         self.piecesArray[x][y] = Piece(color, x, y)
         self.lastGrid .append(self.duplicateGrid())
+        self.calcLiberties()
+        self.removeCapture
 
     def calcLiberties(self):
         self.calcLibertiesVar(self.piecesArray)
@@ -108,7 +110,6 @@ class GameLogic:
                 pieceCheck = array[i][j]
                 if pieceCheck is not None:
                     pieceCheck.liberties = groupLiberties[pieceCheck.group-1]
-
 
     def removeCapture(self):
         for i in range(self.xSize):
