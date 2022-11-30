@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt, QPoint, QSize
 from PyQt6.QtGui import QCursor, QPixmap
 from board import Board
+from prison import Prison
 from game_logic import GameLogic
 from score_board import ScoreBoard
 
@@ -42,6 +43,7 @@ class Go(QMainWindow):
     def initUI(self):
         '''initiates application UI'''
         self.board = Board(self, self.logic)
+        self.prison = Prison(self)
         if self.board.squareWidth()<=self.board.squareHeight():
             squareSide = self.board.squareWidth()
         else:
@@ -51,8 +53,6 @@ class Go(QMainWindow):
         self.cursor_white = QCursor(self.cursor_scaled_pix, -1, -1)
         self.cursor_pix = QPixmap('BlackStone.png')
 
-
-
         self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(int(squareSide*1.5), int(squareSide*1.5)))
         self.cursor_black = QCursor(self.cursor_scaled_pix, -1, -1)
 
@@ -60,9 +60,9 @@ class Go(QMainWindow):
         self.scoreBoard = ScoreBoard(self.board)
         self.board.setCursor(self.cursor_white)
 
-        self.setCentralWidget(Layout(self.board, self.scoreBoard))
+        self.setCentralWidget(Layout(self.board, self.scoreBoard, self.prison))
 
-        self.resize(800,750)
+        self.resize(1000, 650)
         self.center()
         self.setWindowTitle('Go')
         self.show()
@@ -81,9 +81,10 @@ class Go(QMainWindow):
 
 
 class Layout(QWidget):
-    def __init__(self, board, scoreBoard):
+    def __init__(self, board, scoreBoard, prison):
         super().__init__()
         hbox = QHBoxLayout()
-        hbox.addWidget(board, 2)
+        hbox.addWidget(prison, 1)
+        hbox.addWidget(board, 3)
         hbox.addWidget(scoreBoard, 1)
         self.setLayout(hbox)
