@@ -32,7 +32,6 @@ class ScoreBoard(QWidget):
 
     def center(self):
         '''centers the window on the screen, you do not need to implement this method'''
-        #self.go.center()
 
     def make_connection(self, board):
         '''this handles a signal sent from the board class'''
