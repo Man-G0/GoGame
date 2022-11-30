@@ -15,6 +15,7 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def __init__(self, parent, logic):
         super().__init__(parent)
+        self.go = parent
         self.logic = logic
         self.initBoard()
 
@@ -95,8 +96,9 @@ class Board(QFrame):  # base the board on a QFrame widget
             for row in range(0, Board.boardHeight+1):
                 colTransformation = squareSide * 0.5 + squareSide * col
                 rowTransformation = squareSide * 0.5 + squareSide * row
-                if (event.position().x()+5>colTransformation)&(event.position().x()-5<colTransformation)&(event.position().y()+5>rowTransformation)&(event.position().y()-5>rowTransformation):
+                if (event.position().x()+5>colTransformation)&(event.position().x()-5<colTransformation)&(event.position().y()+5>rowTransformation)&(event.position().y()-5<rowTransformation):
                     print("piece placed")
+
                     self.logic.addPiece('W',col,row)
         self.clickLocationSignal.emit(clickLoc)
 
