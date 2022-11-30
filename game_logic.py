@@ -36,7 +36,7 @@ class GameLogic:
             aLine += "---+"
         print(aLine)
 
-    def printPayable(self,playableArray):
+    def printPayable(self, playableArray):
         for j in range(self.xSize):
             aLine = "+"
             for i in range(self.ySize):
@@ -76,7 +76,6 @@ class GameLogic:
         self.piecesArray[x][y] = Piece(color, x, y)
         self.lastGrid .append(self.duplicateGrid())
         self.calcLiberties()
-        self.printLibertiesArray()
         self.removeCapture()
 
     def calcLiberties(self):

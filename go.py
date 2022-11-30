@@ -20,23 +20,6 @@ class Go(QMainWindow):
 
     def initLogic(self):
         self.logic = GameLogic()
-        self.logic.addPiece('W', 2, 5)
-        self.logic.addPiece('B', 3, 5)
-        self.logic.addPiece('W', 2, 6)
-        self.logic.addPiece('W', 1, 1)
-        #self.logic.addPiece('W', 1, 2)
-        self.logic.addPiece('B', 1, 0)
-        self.logic.addPiece('B', 0, 0)
-        self.logic.addPiece('B', 0, 1)
-        self.logic.addPiece('B', 0, 2)
-        self.logic.addPiece('B', 2, 1)
-        self.logic.addPiece('B', 2, 2)
-        self.logic.addPiece('B', 1, 3)
-        self.logic.printPiecesArray()
-        self.logic.calcLiberties()
-        self.logic.printLibertiesArray()
-        self.logic.printPiecesArray()
-        self.logic.printPayable(self.logic.findWPlayable())
 
     def getBoard(self):
         return self.board
@@ -53,11 +36,11 @@ class Go(QMainWindow):
         else:
             squareSide = self.board.squareHeight()
         self.cursor_pix = QPixmap('WhiteStone.png')
-        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(int(squareSide*1.5), int(squareSide*1.5)))
+        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(int(squareSide), int(squareSide)))
         self.cursor_white = QCursor(self.cursor_scaled_pix, -1, -1)
         self.cursor_pix = QPixmap('BlackStone.png')
 
-        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(int(squareSide*1.5), int(squareSide*1.5)))
+        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(int(squareSide), int(squareSide)))
         self.cursor_black = QCursor(self.cursor_scaled_pix, -1, -1)
 
 

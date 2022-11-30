@@ -49,9 +49,10 @@ class Board(QFrame):  # base the board on a QFrame widget
             squareSide = self.squareWidth()
         else:
             squareSide = self.squareHeight()
-        self.go.cursor_scaled_pix = self.go.cursor_pix.scaled(QSize(int(squareSide * 1.5), int(squareSide * 1.5)))
+        self.go.cursor_scaled_pix = self.go.cursor_pix.scaled(QSize(int(squareSide), int(squareSide)))
         self.go.cursor_white = QCursor(self.go.cursor_scaled_pix, -1, -1)
         self.go.cursor_black = QCursor(self.go.cursor_scaled_pix, -1, -1)
+        self.go.cursor()
 
 
     def squareWidth(self):
@@ -128,10 +129,8 @@ class Board(QFrame):  # base the board on a QFrame widget
 
         if self.logic.currentPlayer == "W":
             self.listPlayable = self.logic.findWPlayable()
-            self.logic.printPayable(self.listPlayable)
         elif self.logic.currentPlayer == "B":
             self.listPlayable = self.logic.findBPlayable()
-            self.logic.printPayable(self.listPlayable)
 
         if self.squareWidth()<=self.squareHeight():
             squareSide = self.squareWidth()
