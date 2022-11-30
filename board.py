@@ -1,7 +1,7 @@
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QFrame, QWidget, QVBoxLayout, QLabel, QGridLayout, QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt, QBasicTimer, pyqtSignal, QPointF, QPoint, QRect, QSize
-from PyQt6.QtGui import QPainter, QPixmap, QColor, QPen, QBrush
+from PyQt6.QtGui import QPainter, QPixmap, QColor, QPen, QBrush, QCursor
 from PyQt6.QtTest import QTest
 from piece import Piece
 
@@ -45,10 +45,14 @@ class Board(QFrame):  # base the board on a QFrame widget
             new_size = QtCore.QSize(self.contentsRect().height(), self.contentsRect().height())
         self.resize(new_size)
 
+        if self.squareWidth()<=self.squareHeight():
+            squareSide = self.squareWidth()
+        else:
+            squareSide = self.squareHeight()
+        self.go.cursor_scaled_pix = self.go.cursor_pix.scaled(QSize(int(squareSide * 1.5), int(squareSide * 1.5)))
+        self.go.cursor_white = QCursor(self.go.cursor_scaled_pix, -1, -1)
+        self.go.cursor_black = QCursor(self.go.cursor_scaled_pix, -1, -1)
 
-
-    def mousePosToColRow(self, event):
-        '''convert the mouse click event to a row and column'''
 
     def squareWidth(self):
         '''returns the width of one square in the board'''
@@ -115,14 +119,12 @@ class Board(QFrame):  # base the board on a QFrame widget
                     self.go.cursor()
 
 
-        painter = QPainter()
-        self.playablePosition(painter)
-        self.drawPieces(painter)
         self.clickLocationSignal.emit(clickLoc)
 
     def resetGame(self):
         '''clears pieces from the board'''
-        # TODO write code to reset game
+        painter = QPainter()
+        self.drawBoardSquares(painter)
 
     def playablePosition(self,painter):
 
