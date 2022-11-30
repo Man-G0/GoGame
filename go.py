@@ -31,7 +31,7 @@ class Go(QMainWindow):
         self.logic.calcLiberties()
         self.logic.printLibertiesArray()
         self.logic.printPiecesArray()
-        self.logic.printPayable(self.logic.findBPlayable())
+        self.logic.printPayable(self.logic.findWPlayable())
 
     def getBoard(self):
         return self.board
@@ -41,7 +41,7 @@ class Go(QMainWindow):
 
     def initUI(self):
         '''initiates application UI'''
-        self.board = Board(self)
+        self.board = Board(self.logic)
         if self.board.squareWidth()<=self.board.squareHeight():
             squareSide = self.board.squareWidth()
         else:

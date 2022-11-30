@@ -11,6 +11,7 @@ class GameLogic:
         for i in range(self.xSize):
             yArray = [None]*self.ySize
             self.piecesArray.append(yArray)
+        self.lastGrid = [self.duplicateGrid()]
 
     def printPiecesArray(self):
         for j in range(self.xSize):
@@ -72,6 +73,7 @@ class GameLogic:
 
     def addPiece(self, color, x, y):
         self.piecesArray[x][y] = Piece(color, x, y)
+        self.lastGrid .append(self.duplicateGrid())
 
     def calcLiberties(self):
         self.calcLibertiesVar(self.piecesArray)
@@ -143,21 +145,55 @@ class GameLogic:
                 else:
                     self.duplicatedArray = self.duplicateGrid()
                     self.duplicatedArray[i][j] = Piece(color, i, j)
-                    self.calcLibertiesVar(self.duplicatedArray)
-                    playable = True
-                    for m in range(self.xSize):#optimisable avec des while
-                        for n in range(self.ySize):#optimisable avec des while
-                            pieceCheck = self.duplicatedArray[m][n]
-                            if pieceCheck is not None:
-                                if pieceCheck.liberties == 0 and pieceCheck.color == color:
-                                    playable = False
-                    playableArray[i][j] = playable
+                    if self.checkPreviousGrid(self.duplicatedArray):
+                        playableArray[i][j] = False
+                    else:
+                        self.calcLibertiesVar(self.duplicatedArray)
+                        playable = True
+                        m = 0
+                        while m < self.xSize and playable:
+                            n = 0
+                            while n < self.ySize and playable:
+                                pieceCheck = self.duplicatedArray[m][n]
+                                if pieceCheck is not None:
+                                    if pieceCheck.liberties == 0 and pieceCheck.color == color:
+                                        playable = False
+                                n +=1
+                            m += 1
+                        playableArray[i][j] = playable
 
     def duplicateGrid(self):
         duplicatedArray = []
         for i in range(self.xSize):
             yArray = []
             for j in range(self.ySize):
-                yArray.append(self.piecesArray[i][j])
+                if self.piecesArray[i][j] is None:
+                    yArray.append(None)
+                else:
+                    yArray.append(Piece(self.piecesArray[i][j].color, self.piecesArray[i][j].x, self.piecesArray[i][j].y))
             duplicatedArray.append(yArray)
         return duplicatedArray
+
+    def compareGrid(self, grid1, grid2):
+        same = True
+        i = 0
+        while i < self.xSize and same:
+            j = 0
+            while j < self.ySize and same:
+                if not (grid1[i][j] is None and grid2[i][j] is None):
+                    if grid1[i][j] is None or grid2[i][j] is None:
+                        same = False
+                    elif grid1[i][j] != grid2[i][j]:
+                        same = False
+                j += 1
+            i += 1
+        return same
+
+    def checkPreviousGrid(self, gridToCheck):
+        inPrevious = False
+        i = len(self.lastGrid)-1
+        while i >= 0 and not inPrevious:
+            if self.compareGrid(self.lastGrid[i], gridToCheck):
+                inPrevious = True
+            i -= 1
+        return inPrevious

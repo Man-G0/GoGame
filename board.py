@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QFrame, QWidget, QVBoxLayout, QLabel, QGridLayout, Q
 from PyQt6.QtCore import Qt, QBasicTimer, pyqtSignal, QPointF, QPoint, QRect, QSize
 from PyQt6.QtGui import QPainter, QPixmap, QColor, QPen
 from PyQt6.QtTest import QTest
-from go import Go
 from piece import Piece
 
 class Board(QFrame):  # base the board on a QFrame widget
@@ -14,9 +13,9 @@ class Board(QFrame):  # base the board on a QFrame widget
     timerSpeed  = 1     # the timer updates every 1 millisecond
     counter     = 10    # the number the counter will count down from
 
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.go = Go()
+    def __init__(self, logic):
+        super().__init__()
+        self.logic = logic
         self.initBoard()
 
     def initBoard(self):
