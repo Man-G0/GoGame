@@ -41,14 +41,22 @@ class Go(QMainWindow):
 
     def initUI(self):
         '''initiates application UI'''
+        self.board = Board(self)
+        if self.board.squareWidth()<=self.board.squareHeight():
+            squareSide = self.board.squareWidth()
+        else:
+            squareSide = self.board.squareHeight()
         self.cursor_pix = QPixmap('WhiteStone.png')
-        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(40, 40))
+        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(int(squareSide), int(squareSide)))
         self.cursor_white = QCursor(self.cursor_scaled_pix, -1, -1)
         self.cursor_pix = QPixmap('BlackStone.png')
-        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(40, 40))
+
+
+
+        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(int(squareSide), int(squareSide)))
         self.cursor_black = QCursor(self.cursor_scaled_pix, -1, -1)
 
-        self.board = Board(self)
+
         self.scoreBoard = ScoreBoard(self.board)
         self.board.setCursor(self.cursor_black)
 

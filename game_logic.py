@@ -3,8 +3,8 @@ from piece import Piece
 
 class GameLogic:
     def __init__(self):
-        self.xSize = 9
-        self.ySize = 9
+        self.xSize = 7
+        self.ySize = 7
         self.bCaptured = []
         self.wCaptured = []
         self.piecesArray = []
