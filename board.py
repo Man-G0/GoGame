@@ -49,9 +49,10 @@ class Board(QFrame):  # base the board on a QFrame widget
             squareSide = self.squareWidth()
         else:
             squareSide = self.squareHeight()
-        self.go.cursor_scaled_pix = self.go.cursor_pix.scaled(QSize(int(squareSide), int(squareSide)))
-        self.go.cursor_white = QCursor(self.go.cursor_scaled_pix, -1, -1)
-        self.go.cursor_black = QCursor(self.go.cursor_scaled_pix, -1, -1)
+        self.go.cursor_scaled_pix_white = self.go.cursor_pix_white.scaled(QSize(int(squareSide), int(squareSide)))
+        self.go.cursor_scaled_pix_black = self.go.cursor_pix_black.scaled(QSize(int(squareSide), int(squareSide)))
+        self.go.cursor_white = QCursor(self.go.cursor_scaled_pix_white, -1, -1)
+        self.go.cursor_black = QCursor(self.go.cursor_scaled_pix_black, -1, -1)
         self.go.cursor()
 
 

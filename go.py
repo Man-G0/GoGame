@@ -35,14 +35,8 @@ class Go(QMainWindow):
             squareSide = self.board.squareWidth()
         else:
             squareSide = self.board.squareHeight()
-        self.cursor_pix = QPixmap('WhiteStone.png')
-        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(int(squareSide), int(squareSide)))
-        self.cursor_white = QCursor(self.cursor_scaled_pix, -1, -1)
-        self.cursor_pix = QPixmap('BlackStone.png')
-
-        self.cursor_scaled_pix = self.cursor_pix.scaled(QSize(int(squareSide), int(squareSide)))
-        self.cursor_black = QCursor(self.cursor_scaled_pix, -1, -1)
-
+        self.cursor_pix_white = QPixmap('WhiteStone.png')
+        self.cursor_pix_black = QPixmap('BlackStone.png')
 
         self.scoreBoard = ScoreBoard(self.board)
 
