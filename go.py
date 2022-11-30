@@ -71,6 +71,14 @@ class Go(QMainWindow):
         self.setWindowTitle('Go')
         self.show()
 
+    def cursor(self):
+        if self.logic.currentPlayer == "W":
+            self.board.setCursor(self.cursor_white)
+        elif self.logic.currentPlayer == "B":
+            self.board.setCursor(self.cursor_black)
+
+
+
     def center(self):
         '''centers the window on the screen'''
         gr = self.frameGeometry()
