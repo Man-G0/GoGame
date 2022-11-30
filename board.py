@@ -93,16 +93,17 @@ class Board(QFrame):  # base the board on a QFrame widget
             squareSide = self.squareWidth()
         else:
             squareSide = self.squareHeight()
+        if self.logic.currentPlayer == "W":
+            self.listPlayable = self.logic.findWPlayable()
+            self.logic.printPayable(self.listPlayable)
+        elif self.logic.currentPlayer == "B":
+            self.listPlayable = self.logic.findBPlayable()
+            self.logic.printPayable(self.listPlayable)
         for col in range(0, Board.boardWidth+1):
             for row in range(0, Board.boardHeight+1):
                 colTransformation = squareSide * 0.5 + squareSide * col
                 rowTransformation = squareSide * 0.5 + squareSide * row
-                if self.logic.currentPlayer == "W":
-                    self.listPlayable = self.logic.findWPlayable()
-                    self.logic.printPayable(self.listPlayable)
-                elif self.logic.currentPlayer == "B":
-                    self.listPlayable = self.logic.findBPlayable()
-                    self.logic.printPayable(self.listPlayable)
+
                 if (event.position().x()+squareSide * 0.3>colTransformation)&(event.position().x()-squareSide * 0.3<colTransformation)&(event.position().y()+squareSide * 0.3>rowTransformation)&(event.position().y()-squareSide * 0.3<rowTransformation)&(self.listPlayable[col][row]):
                     print("piece placed")
                     if self.logic.currentPlayer == "W":
