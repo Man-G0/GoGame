@@ -15,6 +15,7 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def __init__(self, parent, logic):
         super().__init__(parent)
+        self.go = parent
         self.logic = logic
         self.initBoard()
 
@@ -95,9 +96,13 @@ class Board(QFrame):  # base the board on a QFrame widget
             for row in range(0, Board.boardHeight+1):
                 colTransformation = squareSide * 0.5 + squareSide * col
                 rowTransformation = squareSide * 0.5 + squareSide * row
-                if (event.position().x()+5>colTransformation)&(event.position().x()-5<colTransformation)&(event.position().y()+5>rowTransformation)&(event.position().y()-5>rowTransformation):
+                self.listPlayable = self.logic.findWPlayable()
+                if (event.position().x()+squareSide * 0.3>colTransformation)&(event.position().x()-squareSide * 0.3<colTransformation)&(event.position().y()+squareSide * 0.3>rowTransformation)&(event.position().y()-squareSide * 0.3<rowTransformation)&(self.listPlayable[col][row]):
                     print("piece placed")
                     self.logic.addPiece('W',col,row)
+
+        painter = QPainter()
+        self.drawPieces(painter)
         self.clickLocationSignal.emit(clickLoc)
 
     def resetGame(self):
@@ -110,8 +115,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.brushSize = 3
         self.brushColor = Qt.GlobalColor.black
         painter.setPen(QPen(self.brushColor, self.brushSize))
-        painter.fillRect(QRect(0, 0, self.contentsRect().width(), self.contentsRect().height()),
-                         QColor("#0629F0"))
+        painter.fillRect(QRect(0, 0, self.contentsRect().width(), self.contentsRect().height()),self.go.backgroundColor)
 
         if self.squareWidth()<=self.squareHeight():
             squareSide = self.squareWidth()
@@ -125,7 +129,7 @@ class Board(QFrame):  # base the board on a QFrame widget
                 painter.fillRect(QRect(int(colTransformation),int(rowTransformation),int(squareSide),int(squareSide)),QColor("#E0BD6B"))
                 painter.drawRect(QRect(int(colTransformation),int(rowTransformation),int(squareSide),int(squareSide)))
                 painter.restore()
-                self.brushColor = QColor("#E0BD6B")
+                self.brushColor = self.go.backgroundColor
 
 
 
