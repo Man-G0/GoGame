@@ -41,7 +41,7 @@ class Go(QMainWindow):
 
     def initUI(self):
         '''initiates application UI'''
-        self.board = Board(self.logic)
+        self.board = Board(self, self.logic)
         if self.board.squareWidth()<=self.board.squareHeight():
             squareSide = self.board.squareWidth()
         else:
