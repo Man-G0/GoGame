@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt, QPoint, QSize
-from PyQt6.QtGui import QCursor, QPixmap
+from PyQt6.QtGui import QCursor, QPixmap, QColor
 from board import Board
 from prison import Prison
 from game_logic import GameLogic
@@ -11,8 +11,12 @@ class Go(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.backgroundColor = QColor("#E0BD6B")
+        self.gridColor = Qt.GlobalColor.black
+
         self.initLogic()
         self.initUI()
+
 
     def initLogic(self):
         self.logic = GameLogic()

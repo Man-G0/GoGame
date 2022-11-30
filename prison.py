@@ -9,7 +9,8 @@ class Prison(QFrame):  # base the board on a QFrame widget
 
     def __init__(self, parent):
         super().__init__(parent)
+        self.go = parent
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.fillRect(QRect(0, 0, self.contentsRect().width(), self.contentsRect().height()),QColor("#0629F0"))
+        painter.fillRect(QRect(0, 0, self.contentsRect().width(), self.contentsRect().height()), self.go.backgroundColor)
