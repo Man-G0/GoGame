@@ -24,12 +24,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         #self.isStarted = False      # game is not currently started
         #self.start()                # start the game which will start the timer
         #self.setStyleSheet("background-color: blue")
-        boardImage = QPixmap("board-19x19.jpg")
         self.setMinimumSize(300, 300)
-
-        self.boardGridLayout = QGridLayout()
-
-        self.boardLayout = QHBoxLayout()
 
         if self.squareWidth() <= self.squareHeight():
             squareSide = self.squareWidth()
@@ -39,43 +34,16 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
         self.blackStone = QPixmap("BlackStone.png")
         self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
-        self.empty = QPixmap("Empty.png")
-        self.empty.scaled(QSize(int(squareSide), int(squareSide)))
-
-
-        """self.whiteQlabel = QLabel()
-        self.whiteQlabel.setPixmap(self.whiteStone)
-        self.boardLayout.addWidget(self.whiteQlabel)
-        self.whiteQlabel.setStyleSheet("background-image: url(Empty.png)")
-
-        self.boardLayout.addStretch(15)
-
-        self.blackQlabel = QLabel()
-        self.blackQlabel.setPixmap(self.blackStone)
-        self.boardLayout.addWidget(self.blackQlabel)
-        self.blackQlabel.setStyleSheet("background-image: url(Empty.png)")
-
-        self.emptyQlabel = QLabel()
-        self.emptyQlabel.setPixmap(self.empty)
-        #self.boardLayout.addWidget(self.emptyQlabel)
-        self.emptyQlabel.setStyleSheet("background-image: url(Empty.png)")
-
-        self.boardGridLayout.addWidget(self.blackQlabel, 0, 1)
-        self.boardGridLayout.addWidget(self.whiteQlabel, 0, 10)
-        self.setLayout(self.boardLayout)"""
-
-        #self.setLayout(self.boardLayout)
 
     def resizeEvent(self, event):
         # Create a square base size of 10x10 and scale it to the new size
         # maintaining aspect ratio.
-        if self.contentsRect().height()> self.contentsRect().width():
+        if self.contentsRect().height() > self.contentsRect().width():
             new_size = QtCore.QSize(self.contentsRect().width(), self.contentsRect().width())
         else:
             new_size = QtCore.QSize(self.contentsRect().height(), self.contentsRect().height())
         self.resize(new_size)
-        painter = QPainter(self)
-        self.drawPieces(painter)
+
 
 
     def mousePosToColRow(self, event):
@@ -119,19 +87,17 @@ class Board(QFrame):  # base the board on a QFrame widget
         '''this event is automatically called when the mouse is pressed'''
         clickLoc = "click location ["+str(event.position().x())+","+str(event.position().y())+"]"     # the location where a mouse click was registered
         print("mousePressEvent() - "+clickLoc)
-        # TODO you could call some game logic here
         if self.squareWidth() <= self.squareHeight():
             squareSide = self.squareWidth()
         else:
             squareSide = self.squareHeight()
-        for row in range(0, Board.boardHeight+1):
-            for col in range(0, Board.boardWidth+1):
+        for col in range(0, Board.boardWidth+1):
+            for row in range(0, Board.boardHeight+1):
                 colTransformation = squareSide * 0.5 + squareSide * col
                 rowTransformation = squareSide * 0.5 + squareSide * row
                 if (event.position().x()+5>colTransformation)&(event.position().x()-5<colTransformation)&(event.position().y()+5>rowTransformation)&(event.position().y()-5>rowTransformation):
                     print("piece placed")
                     self.logic.addPiece('W',col,row)
-
         self.clickLocationSignal.emit(clickLoc)
 
     def resetGame(self):
@@ -171,18 +137,19 @@ class Board(QFrame):  # base the board on a QFrame widget
             squareSide = self.squareWidth()
         else:
             squareSide = self.squareHeight()
-        image = QRect(0, 0, int(squareSide), int(squareSide))
+        image = QRect(0, 0, 70, 70)
         for row in range(0, Board.boardHeight+1):
             for col in range(0, Board.boardWidth+1):
                 painter.save()
                 colTransformation = squareSide * col
                 rowTransformation = squareSide * row
-                if self.logic.piecesArray[col][row].color=='W':
-                    piece = QRect(int(colTransformation),int(rowTransformation),int(squareSide), int(squareSide))
-                    self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
-                    painter.drawPixmap(piece, self.whiteStone, image)
-                elif self.logic.piecesArray[col][row].color=='B':
-                    piece = QRect(int(colTransformation),int(rowTransformation), int(squareSide), int(squareSide))
-                    self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
-                    painter.drawPixmap(piece, self.blackStone, image)
+                if self.logic.piecesArray[col][row] is not None:
+                    if self.logic.piecesArray[col][row].color == 'W':
+                        piece = QRect(int(colTransformation),int(rowTransformation),int(squareSide), int(squareSide))
+                        self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
+                        painter.drawPixmap(piece, self.whiteStone, image)
+                    elif self.logic.piecesArray[col][row].color == 'B':
+                        piece = QRect(int(colTransformation),int(rowTransformation), int(squareSide), int(squareSide))
+                        self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
+                        painter.drawPixmap(piece, self.blackStone, image)
                 painter.restore()
