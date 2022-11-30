@@ -75,7 +75,7 @@ class Board(QFrame):  # base the board on a QFrame widget
             new_size = QtCore.QSize(self.contentsRect().height(), self.contentsRect().height())
         self.resize(new_size)
         painter = QPainter(self)
-        #self.drawPieces(painter)
+        self.drawPieces(painter)
 
 
     def mousePosToColRow(self, event):
@@ -113,7 +113,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         '''paints the board and the pieces of the game'''
         painter = QPainter(self)
         self.drawBoardSquares(painter)
-        #self.drawPieces(painter)
+        self.drawPieces(painter)
 
     def mousePressEvent(self, event):
         '''this event is automatically called when the mouse is pressed'''
@@ -130,7 +130,7 @@ class Board(QFrame):  # base the board on a QFrame widget
                 rowTransformation = squareSide * 0.5 + squareSide * row
                 if (event.position().x()+5>colTransformation)&(event.position().x()-5<colTransformation)&(event.position().y()+5>rowTransformation)&(event.position().y()-5>rowTransformation):
                     print("piece placed")
-                    self.logic.addPiece('W',colTransformation,rowTransformation)
+                    self.logic.addPiece('W',col,row)
 
         self.clickLocationSignal.emit(clickLoc)
 
@@ -177,11 +177,11 @@ class Board(QFrame):  # base the board on a QFrame widget
                 painter.save()
                 colTransformation = squareSide * col
                 rowTransformation = squareSide * row
-                if self.logic.piecesArray[col,row]=='W':
+                if self.logic.piecesArray[col][row].color=='W':
                     piece = QRect(int(colTransformation),int(rowTransformation),int(squareSide), int(squareSide))
                     self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
                     painter.drawPixmap(piece, self.whiteStone, image)
-                elif self.logic.piecesArray[col,row]=='B':
+                elif self.logic.piecesArray[col][row].color=='B':
                     piece = QRect(int(colTransformation),int(rowTransformation), int(squareSide), int(squareSide))
                     self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
                     painter.drawPixmap(piece, self.blackStone, image)
