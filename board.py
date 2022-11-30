@@ -95,10 +95,8 @@ class Board(QFrame):  # base the board on a QFrame widget
             squareSide = self.squareHeight()
         if self.logic.currentPlayer == "W":
             self.listPlayable = self.logic.findWPlayable()
-            self.logic.printPayable(self.listPlayable)
         elif self.logic.currentPlayer == "B":
             self.listPlayable = self.logic.findBPlayable()
-            self.logic.printPayable(self.listPlayable)
         for col in range(0, Board.boardWidth+1):
             for row in range(0, Board.boardHeight+1):
                 colTransformation = squareSide * 0.5 + squareSide * col

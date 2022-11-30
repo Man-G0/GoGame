@@ -76,7 +76,8 @@ class GameLogic:
         self.piecesArray[x][y] = Piece(color, x, y)
         self.lastGrid .append(self.duplicateGrid())
         self.calcLiberties()
-        self.removeCapture
+        self.printLibertiesArray()
+        self.removeCapture()
 
     def calcLiberties(self):
         self.calcLibertiesVar(self.piecesArray)
@@ -118,9 +119,11 @@ class GameLogic:
                 if pieceCheck is not None:
                     if pieceCheck.liberties == 0 and pieceCheck.color == "W":
                         self.wCaptured.append(pieceCheck)
+                        print("white remove")
                         self.piecesArray[i][j] = None
                     elif pieceCheck.liberties == 0 and pieceCheck.color == "B":
                         self.bCaptured.append(pieceCheck)
+                        print("black remove")
                         self.piecesArray[i][j] = None
 
     def findBPlayable(self):

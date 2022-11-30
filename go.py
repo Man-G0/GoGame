@@ -62,7 +62,6 @@ class Go(QMainWindow):
 
 
         self.scoreBoard = ScoreBoard(self.board)
-        self.board.setCursor(self.cursor_white)
 
         self.setCentralWidget(Layout(self.board, self.scoreBoard, self.prison))
 
