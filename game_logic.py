@@ -76,7 +76,7 @@ class GameLogic:
         self.piecesArray[x][y] = Piece(color, x, y)
         self.lastGrid .append(self.duplicateGrid())
         self.calcLiberties()
-        self.removeCapture()
+        self.removeCapture(color)
 
     def calcLiberties(self):
         self.calcLibertiesVar(self.piecesArray)
@@ -111,19 +111,20 @@ class GameLogic:
                 if pieceCheck is not None:
                     pieceCheck.liberties = groupLiberties[pieceCheck.group-1]
 
-    def removeCapture(self):
+    def removeCapture(self, color):
         for i in range(self.xSize):
             for j in range(self.ySize):
                 pieceCheck = self.piecesArray[i][j]
                 if pieceCheck is not None:
-                    if pieceCheck.liberties == 0 and pieceCheck.color == "W":
-                        self.wCaptured.append(pieceCheck)
-                        print("white remove")
-                        self.piecesArray[i][j] = None
-                    elif pieceCheck.liberties == 0 and pieceCheck.color == "B":
-                        self.bCaptured.append(pieceCheck)
-                        print("black remove")
-                        self.piecesArray[i][j] = None
+                    if pieceCheck.color != color:
+                        if pieceCheck.liberties == 0 and pieceCheck.color == "W":
+                            self.wCaptured.append(pieceCheck)
+                            print("white remove")
+                            self.piecesArray[i][j] = None
+                        elif pieceCheck.liberties == 0 and pieceCheck.color == "B":
+                            self.bCaptured.append(pieceCheck)
+                            print("black remove")
+                            self.piecesArray[i][j] = None
 
     def findBPlayable(self):
         self.bPlayable = []
@@ -153,6 +154,15 @@ class GameLogic:
                         playableArray[i][j] = False
                     else:
                         self.calcLibertiesVar(self.duplicatedArray)
+                        for m in range(self.xSize):
+                            for n in range(self.ySize):
+                                pieceCheck = self.duplicatedArray[m][n]
+                                if pieceCheck is not None:
+                                    if pieceCheck.liberties == 0 and pieceCheck.color != color:
+                                        self.duplicatedArray[m][n] = None
+                        self.calcLibertiesVar(self.duplicatedArray)
+
+
                         playable = True
                         m = 0
                         while m < self.xSize and playable:
@@ -187,10 +197,12 @@ class GameLogic:
                 if not (grid1[i][j] is None and grid2[i][j] is None):
                     if grid1[i][j] is None or grid2[i][j] is None:
                         same = False
-                    elif grid1[i][j] != grid2[i][j]:
+                    elif grid1[i][j].color != grid2[i][j].color:
                         same = False
                 j += 1
             i += 1
+        if same:
+            print(same)
         return same
 
     def checkPreviousGrid(self, gridToCheck):
