@@ -119,11 +119,9 @@ class GameLogic:
                     if pieceCheck.color != color:
                         if pieceCheck.liberties == 0 and pieceCheck.color == "W":
                             self.wCaptured.append(pieceCheck)
-                            print("white remove")
                             self.piecesArray[i][j] = None
                         elif pieceCheck.liberties == 0 and pieceCheck.color == "B":
                             self.bCaptured.append(pieceCheck)
-                            print("black remove")
                             self.piecesArray[i][j] = None
 
     def findBPlayable(self):
@@ -201,8 +199,6 @@ class GameLogic:
                         same = False
                 j += 1
             i += 1
-        if same:
-            print(same)
         return same
 
     def checkPreviousGrid(self, gridToCheck):

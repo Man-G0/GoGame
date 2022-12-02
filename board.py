@@ -93,8 +93,8 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def mousePressEvent(self, event):
         '''this event is automatically called when the mouse is pressed'''
-        clickLoc = "click location ["+str(event.position().x())+","+str(event.position().y())+"]"     # the location where a mouse click was registered
-        print("mousePressEvent() - "+clickLoc)
+        posX = event.position().x()
+        posY = event.position().y()
         if self.squareWidth() <= self.squareHeight():
             squareSide = self.squareWidth()
         else:
@@ -108,8 +108,7 @@ class Board(QFrame):  # base the board on a QFrame widget
                 colTransformation = squareSide * 0.5 + squareSide * col
                 rowTransformation = squareSide * 0.5 + squareSide * row
 
-                if (event.position().x()+squareSide * 0.3>colTransformation)&(event.position().x()-squareSide * 0.3<colTransformation)&(event.position().y()+squareSide * 0.3>rowTransformation)&(event.position().y()-squareSide * 0.3<rowTransformation)&(self.listPlayable[col][row]):
-                    print("piece placed")
+                if (posX+squareSide * 0.3>colTransformation)&(posX-squareSide * 0.3<colTransformation)&(posY+squareSide * 0.3>rowTransformation)&(posY-squareSide * 0.3<rowTransformation)&(self.listPlayable[col][row]):
                     if self.logic.currentPlayer == "W":
                         self.logic.addPiece('W',col,row)
                         self.logic.currentPlayer = "B"
@@ -119,7 +118,8 @@ class Board(QFrame):  # base the board on a QFrame widget
                     self.go.cursor()
 
 
-        self.clickLocationSignal.emit(clickLoc)
+        self.clickLocationSignal.emit(self.logic.currentPlayer)
+
 
     def resetGame(self):
         '''clears pieces from the board'''

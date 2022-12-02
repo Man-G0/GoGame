@@ -12,6 +12,7 @@ class ScoreBoard(QWidget):
 
     def initUI(self, board):
         '''initiates ScoreBoard UI'''
+        self.board = board
         self.resize(200, 200)
         self.center()
         self.setWindowTitle('ScoreBoard')
@@ -22,9 +23,9 @@ class ScoreBoard(QWidget):
         self.mainLayout = QVBoxLayout()
 
         #create two labels which will be updated by signals
-        self.label_clickLocation = QLabel("Click Location: ")
+        self.label_playerTurn = QLabel("Turn to player ")
         self.label_timeRemaining = QLabel("Time remaining: ")
-        self.mainLayout.addWidget(self.label_clickLocation)
+        self.mainLayout.addWidget(self.label_playerTurn)
         self.mainLayout.addWidget(self.label_timeRemaining)
         self.make_connection(board)
         self.setLayout(self.mainLayout)
@@ -36,16 +37,17 @@ class ScoreBoard(QWidget):
     def make_connection(self, board):
         '''this handles a signal sent from the board class'''
         # when the clickLocationSignal is emitted in board the setClickLocation slot receives it
-        board.clickLocationSignal.connect(self.setClickLocation)
+        board.clickLocationSignal.connect(self.clickUpdate)
         # when the updateTimerSignal is emitted in the board the setTimeRemaining slot receives it
         board.updateTimerSignal.connect(self.setTimeRemaining)
 
-    @pyqtSlot(str) # checks to make sure that the following slot is receiving an argument of the type 'int'
-    def setClickLocation(self, clickLoc):
+
+    def clickUpdate(self, player):
         '''updates the label to show the click location'''
-        self.label_clickLocation.setText("Click Location:" + clickLoc)
-        print('slot ' + clickLoc)
-        self.center()
+        if player == 'W':
+            self.label_playerTurn.setText("Turn to player White")
+        elif player == 'B':
+            self.label_playerTurn.setText("Turn to player Black")
 
     @pyqtSlot(int)
     def setTimeRemaining(self, timeRemainng):
