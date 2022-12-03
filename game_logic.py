@@ -12,7 +12,7 @@ class GameLogic:
             yArray = [None]*self.ySize
             self.piecesArray.append(yArray)
         self.lastGrid = [self.duplicateGrid()]
-        self.currentPlayer = "W"
+        self.currentPlayer = "B"
 
     def printPiecesArray(self):
         for j in range(self.xSize):
