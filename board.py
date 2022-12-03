@@ -1,17 +1,18 @@
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QFrame, QWidget, QVBoxLayout, QLabel, QGridLayout, QHBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QFrame, QWidget, QVBoxLayout, QLabel, QGridLayout, QHBoxLayout, QSizePolicy, QPushButton
 from PyQt6.QtCore import Qt, QBasicTimer, pyqtSignal, QPointF, QPoint, QRect, QSize
-from PyQt6.QtGui import QPainter, QPixmap, QColor, QPen, QBrush, QCursor
+from PyQt6.QtGui import QPainter, QPixmap, QColor, QPen, QBrush, QCursor, QIcon
 from PyQt6.QtTest import QTest
 from piece import Piece
 
 class Board(QFrame):  # base the board on a QFrame widget
     updateTimerSignal = pyqtSignal(int) # signal sent when timer is updated
     clickLocationSignal = pyqtSignal(str) # signal sent when there is a new click location
+    updatePrison = pyqtSignal(str)
     boardWidth  = 6    # board is 6 squares wide
     boardHeight = 6     # board is 6 squares high
-    timerSpeed  = 1     # the timer updates every 1 millisecond
-    counter     = 10    # the number the counter will count down from
+    timerSpeed  = 1000     # the timer updates every 1 second
+    counter     = 20    # the number the counter will count down from
 
     def __init__(self, parent, logic):
         super().__init__(parent)
@@ -21,11 +22,11 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def initBoard(self):
         '''initiates board'''
-        #self.timer = QBasicTimer()  # create a timer for the game
-        #self.isStarted = False      # game is not currently started
-        #self.start()                # start the game which will start the timer
-        #self.setStyleSheet("background-color: blue")
+        self.timer = QBasicTimer()  # create a timer for the game
+        self.isStarted = False      # game is not currently started
+        self.start()                # start the game which will start the timer
         self.setMinimumSize(300, 300)
+        self.skipnumber = 0;
 
         if self.squareWidth() <= self.squareHeight():
             squareSide = self.squareWidth()
@@ -70,19 +71,30 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.resetGame()                            # reset the game
         self.timer.start(self.timerSpeed, self)     # start the timer with the correct speed
         print("start () - timer is started")
+        self.clickLocationSignal.emit(self.logic.currentPlayer)
 
     def timerEvent(self, event):
         '''this event is automatically called when the timer is updated. based on the timerSpeed variable '''
-        # TODO adapt this code to handle your timers
         if event.timerId() == self.timer.timerId():  # if the timer that has 'ticked' is the one in this class
-            if Board.counter == 0:
-                print("Game over")
+            if self.counter == 0:
+                self.skipTurn()
             self.counter -= 1
-            print('timerEvent()', self.counter)
             self.updateTimerSignal.emit(self.counter)
         else:
             super(Board, self).timerEvent(event)      # if we do not handle an event we should pass it to the super
                                                         # class for handling
+    def skipTurn(self):
+        self.skipnumber += 1
+        self.counter = 20
+        if self.skipnumber<2:
+            if self.logic.currentPlayer == "W":
+                self.logic.currentPlayer = "B"
+            elif self.logic.currentPlayer == "B":
+                self.logic.currentPlayer = "W"
+            self.go.cursor()
+            self.clickLocationSignal.emit(self.logic.currentPlayer)
+        else:
+            self.endGame("2 skips")
 
     def paintEvent(self, event):
         '''paints the board and the pieces of the game'''
@@ -109,6 +121,9 @@ class Board(QFrame):  # base the board on a QFrame widget
                 rowTransformation = squareSide * 0.5 + squareSide * row
 
                 if (posX+squareSide * 0.3>colTransformation)&(posX-squareSide * 0.3<colTransformation)&(posY+squareSide * 0.3>rowTransformation)&(posY-squareSide * 0.3<rowTransformation)&(self.listPlayable[col][row]):
+                    if self.skipnumber>0 :
+                        self.skipnumber = 0
+                    self.counter=20
                     if self.logic.currentPlayer == "W":
                         self.logic.addPiece('W',col,row)
                         self.logic.currentPlayer = "B"
@@ -116,11 +131,43 @@ class Board(QFrame):  # base the board on a QFrame widget
                         self.logic.addPiece('B',col,row)
                         self.logic.currentPlayer = "W"
                     self.go.cursor()
+                    self.updatePrison.emit("")
 
 
         self.clickLocationSignal.emit(self.logic.currentPlayer)
 
+    def endGame(self,reason):
+        self.widget_EndGame = QWidget()
+        self.widget_EndGame.setWindowIcon(QIcon("icon.png"))
+        self.widget_EndGame.setMinimumSize(250,150)
+        self.widget_EndGame.setWindowTitle("Game end")
+        label_end= QLabel("The game has ended !")
+        label_reason = QLabel()
+        if reason=="2 skips":
+            label_reason.setText("Both players skipped their turn")
 
+
+        layout_buttonsEnd = QHBoxLayout()
+
+        button_restart = QPushButton("restart")
+        #button_restart.clicked.connect(self.restart)
+        layout_buttonsEnd.addWidget(button_restart)
+
+        button_exit = QPushButton("exit")
+        #button_exit.clicked.connect(self.exit)
+        layout_buttonsEnd.addWidget(button_exit)
+
+        layout_end = QVBoxLayout()
+        layout_end.addWidget(label_end)
+        layout_end.addWidget(label_reason)
+        layout_end.addLayout(layout_buttonsEnd)
+        self.widget_EndGame.setLayout(layout_end)
+
+        self.widget_EndGame.show()
+        gr = self.widget_EndGame.frameGeometry()
+        screen = self.screen().availableGeometry().center()
+        gr.moveCenter(screen)
+        self.widget_EndGame.move(gr.topLeft())
     def resetGame(self):
         '''clears pieces from the board'''
         painter = QPainter()
@@ -175,7 +222,6 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def drawPieces(self, painter):
         '''draw the prices on the board'''
-        #colour = Qt.GlobalColor.transparent # empty square could be modeled with transparent pieces
 
         if self.squareWidth()<=self.squareHeight():
             squareSide = self.squareWidth()

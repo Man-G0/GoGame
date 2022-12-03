@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QDockWidget, QVBoxLayout, QWidget, QLabel #TODO import additional Widget classes as desired
+from PyQt6.QtWidgets import QDockWidget, QVBoxLayout, QWidget, QLabel, \
+    QPushButton
 from PyQt6.QtCore import pyqtSlot
-#from go import Go
 
 
 class ScoreBoard(QWidget):
@@ -23,9 +23,13 @@ class ScoreBoard(QWidget):
         self.mainLayout = QVBoxLayout()
 
         #create two labels which will be updated by signals
-        self.label_playerTurn = QLabel("Turn to player ")
+        self.label_playerTurn = QLabel("Turn to player Black")
+        self.button_skipTurn = QPushButton("Skip turn")
+
+        self.button_skipTurn.clicked.connect(self.board.skipTurn)
         self.label_timeRemaining = QLabel("Time remaining: ")
         self.mainLayout.addWidget(self.label_playerTurn)
+        self.mainLayout.addWidget(self.button_skipTurn)
         self.mainLayout.addWidget(self.label_timeRemaining)
         self.make_connection(board)
         self.setLayout(self.mainLayout)
@@ -33,6 +37,7 @@ class ScoreBoard(QWidget):
 
     def center(self):
         '''centers the window on the screen, you do not need to implement this method'''
+        #self.go.center()
 
     def make_connection(self, board):
         '''this handles a signal sent from the board class'''
@@ -50,10 +55,12 @@ class ScoreBoard(QWidget):
             self.label_playerTurn.setText("Turn to player Black")
 
     @pyqtSlot(int)
-    def setTimeRemaining(self, timeRemainng):
+    def setTimeRemaining(self, timeRemaining):
         '''updates the time remaining label to show the time remaining'''
-        update = "Time Remaining:" + str(timeRemainng)
+        update = "Time Remaining:" + str(timeRemaining)
         self.label_timeRemaining.setText(update)
-        print('slot '+update)
-        # self.redraw()
+        if timeRemaining < 10:
+            self.label_timeRemaining.setStyleSheet("color: red")
+        else:
+            self.label_timeRemaining.setStyleSheet("color: black")
 

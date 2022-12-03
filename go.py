@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt, QPoint, QSize
-from PyQt6.QtGui import QCursor, QPixmap, QColor
+from PyQt6.QtGui import QCursor, QPixmap, QColor, QIcon, QPainter
 from board import Board
 from prison import Prison
 from game_logic import GameLogic
@@ -8,12 +8,11 @@ from score_board import ScoreBoard
 
 
 class Go(QMainWindow):
-
     def __init__(self):
         super().__init__()
         self.backgroundColor = QColor("#E0BD6B")
         self.gridColor = Qt.GlobalColor.black
-
+        self.setWindowIcon(QIcon("icon.png"))
         self.initLogic()
         self.initUI()
 
@@ -30,8 +29,8 @@ class Go(QMainWindow):
     def initUI(self):
         '''initiates application UI'''
         self.board = Board(self, self.logic)
-        self.prison = Prison(self)
-        if self.board.squareWidth()<=self.board.squareHeight():
+        self.prison = Prison(self,self.board)
+        if self.board.squareWidth() <= self.board.squareHeight():
             squareSide = self.board.squareWidth()
         else:
             squareSide = self.board.squareHeight()
@@ -53,17 +52,12 @@ class Go(QMainWindow):
         elif self.logic.currentPlayer == "B":
             self.board.setCursor(self.cursor_black)
 
-
-
     def center(self):
         '''centers the window on the screen'''
         gr = self.frameGeometry()
         screen = self.screen().availableGeometry().center()
-
         gr.moveCenter(screen)
         self.move(gr.topLeft())
-        """size = self.geometry()
-        self.move(int(screen.x() - size.width()/2), int(screen.y() - size.height()/2))"""
 
 
 
