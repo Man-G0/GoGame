@@ -197,3 +197,5 @@ class Board(QFrame):  # base the board on a QFrame widget
                         self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
                         painter.drawPixmap(piece, self.blackStone, image)
                 painter.restore()
+
+    

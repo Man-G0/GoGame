@@ -1,5 +1,5 @@
 from piece import Piece
-
+from empty import Empty
 
 class GameLogic:
     def __init__(self):
@@ -77,6 +77,7 @@ class GameLogic:
         self.lastGrid .append(self.duplicateGrid())
         self.calcLiberties()
         self.removeCapture(color)
+        self.calcPoint()
 
     def calcLiberties(self):
         self.calcLibertiesVar(self.piecesArray)
@@ -209,3 +210,43 @@ class GameLogic:
                 inPrevious = True
             i -= 1
         return inPrevious
+
+    def calcPoint(self):
+        duplicate = self.duplicateGrid()
+        for i in range(self.xSize):
+            for j in range(self.ySize):
+                if duplicate[i][j] is None:
+                    duplicate[i][j] = Empty(i, j)
+
+        group = 0
+        listColorNear = []
+        for i in range(self.xSize):
+            for j in range(self.ySize):
+                if type(duplicate[i][j]) == Empty:
+                    if duplicate[i][j].group == 0:
+                        group += 1
+                        listColorNear.append(duplicate[i][j].calcGroup(self.xSize, self.ySize, group, duplicate))
+
+        for i in range(group-1):
+            if "B" in listColorNear[i] and "W" in listColorNear[i]:
+                listColorNear[i] = "both"
+            elif "B" in listColorNear[i]:
+                listColorNear[i] = "B"
+            elif "W" in listColorNear[i]:
+                listColorNear[i] = "W"
+
+        scoreB = 0
+        scoreW = 0
+        for i in range(self.xSize):
+            for j in range(self.ySize):
+                if type(duplicate[i][j]) == Empty:
+                    if listColorNear[duplicate[i][j].group-1] == 'B':
+                        scoreB += 1
+                    if listColorNear[duplicate[i][j].group-1] == 'W':
+                        scoreW += 1
+
+        scoreB -= len(self.bCaptured)
+        scoreW -= len(self.wCaptured)
+        print("scoreB = " + str(scoreB))
+        print("scoreW = " + str(scoreW))
+
