@@ -81,13 +81,15 @@ class Board(QFrame):  # base the board on a QFrame widget
             if self.logic.currentPlayer == "B":
                 if self.counterB == 0:
                     self.endGame("BNoTime")
-                self.counterB -= 1
-                self.updateTimerBSignal.emit(self.counterB)
+                else:
+                    self.counterB -= 1
+                    self.updateTimerBSignal.emit(self.counterB)
             elif self.logic.currentPlayer == "W":
                 if self.counterW == 0:
                     self.endGame("WNoTime")
-                self.counterW -= 1
-                self.updateTimerWSignal.emit(self.counterW)
+                else:
+                    self.counterW -= 1
+                    self.updateTimerWSignal.emit(self.counterW)
         else:
             super(Board, self).timerEvent(event)      # if we do not handle an event we should pass it to the super
                                                         # class for handling
@@ -147,12 +149,10 @@ class Board(QFrame):  # base the board on a QFrame widget
     def endGame(self, reason):
         self.widget_EndGame = QWidget()
         self.timer.stop()
-        self.counter = 0
-        self.updateTimerSignal.emit(self.counter)
         self.widget_EndGame.setWindowIcon(QIcon("icon.png"))
-        self.widget_EndGame.setMinimumSize(250,150)
+        self.widget_EndGame.setMinimumSize(250, 150)
         self.widget_EndGame.setWindowTitle("Game end")
-        label_end= QLabel("The game has ended !")
+        label_end = QLabel("The game has ended !")
         label_reason = QLabel()
         if reason == "2 skips":
             label_reason.setText("Both players skipped their turn")
