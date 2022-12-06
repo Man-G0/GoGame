@@ -14,70 +14,11 @@ class GameLogic:
         self.lastGrid = [self.duplicateGrid()]
         self.currentPlayer = "B"
 
-    def printPiecesArray(self):
-        for j in range(self.xSize):
-            aLine = "+"
-            for i in range(self.ySize):
-                aLine += "---+"
-            print(aLine)
-            aLine = "|"
-            for i in range(self.ySize):
-                if self.piecesArray[i][j] is None:
-                    aLine += "   |"
-                elif self.piecesArray[i][j].color == 'W':
-                    aLine += " W |"
-                elif self.piecesArray[i][j].color == 'B':
-                    aLine += " B |"
-                else:
-                    aLine += " X |"
-            print(aLine)
-            aLine = "+"
-        for i in range(self.ySize):
-            aLine += "---+"
-        print(aLine)
-
-    def printPayable(self, playableArray):
-        for j in range(self.xSize):
-            aLine = "+"
-            for i in range(self.ySize):
-                aLine += "---+"
-            print(aLine)
-            aLine = "|"
-            for i in range(self.ySize):
-                if playableArray[i][j]:
-                    aLine += " O |"
-                else:
-                    aLine += " X |"
-            print(aLine)
-            aLine = "+"
-        for i in range(self.ySize):
-            aLine += "---+"
-        print(aLine)
-
-    def printLibertiesArray(self):
-        for j in range(self.xSize):
-            aLine = "+"
-            for i in range(self.ySize):
-                aLine += "---+"
-            print(aLine)
-            aLine = "|"
-            for i in range(self.ySize):
-                if self.piecesArray[i][j] is None:
-                    aLine += "   |"
-                else:
-                    aLine += " " + str(self.piecesArray[i][j].liberties) + " |"
-            print(aLine)
-            aLine = "+"
-        for i in range(self.ySize):
-            aLine += "---+"
-        print(aLine)
-
     def addPiece(self, color, x, y):
         self.piecesArray[x][y] = Piece(color, x, y)
         self.lastGrid .append(self.duplicateGrid())
         self.calcLiberties()
         self.removeCapture(color)
-        self.calcPoint()
 
     def calcLiberties(self):
         self.calcLibertiesVar(self.piecesArray)
@@ -245,8 +186,23 @@ class GameLogic:
                     if listColorNear[duplicate[i][j].group-1] == 'W':
                         scoreW += 1
 
-        scoreB -= len(self.bCaptured)
+        scoreB -= len(self.bCaptured) + 6.5
         scoreW -= len(self.wCaptured)
         print("scoreB = " + str(scoreB))
         print("scoreW = " + str(scoreW))
+
+    def removeDead(self, x, y):
+        pieceCheck = self.piecesArray[x][y]
+        if pieceCheck is None:
+            return False
+        else :
+            if pieceCheck.color == "B":
+                self.bCaptured.append(pieceCheck)
+                self.piecesArray[x][y] = None
+                return True
+            elif pieceCheck.color == "W":
+                self.wCaptured.append(pieceCheck)
+                self.piecesArray[x][y] = None
+                return True
+
 
