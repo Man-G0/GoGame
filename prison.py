@@ -11,8 +11,7 @@ class Prison(QFrame):
 
         self.go = parent
         self.board = board
-        self.blackList = parent.logic.bCaptured
-        self.whiteList = parent.logic.wCaptured
+
         self.whiteStone = QPixmap("WhiteStone.png")
         self.size = int(self.contentsRect().width() / 4)
         self.whiteStone.scaled(QSize(self.size, self.size))
@@ -28,23 +27,6 @@ class Prison(QFrame):
         self.drawPrison(painter)
     def drawPrison(self,painter):
         self.setMinimumSize(100, 300)
-        self.a+=1
-        print(self.a)
-        painter.fillRect(QRect(0, 0, self.contentsRect().width(), self.contentsRect().height()), self.go.backgroundColor)
-
-        image = QRect(0, 0, 70, 70)
-        painter.save()
-        if self.a%2==0:
-            print("pair")
-            #piece = QRect(int(self.contentsRect().width() / 9), 100, self.size, self.size)
-            piece = QRect(0, 100, self.size, self.size)
-            painter.drawPixmap(piece, self.blackStone, image)
-
-        for i in range(0, len(self.blackList)):
-            #print(self.blackStone[i])
-            piece = QRect(int(self.contentsRect().width() / 9), 100, self.size, self.size)
-            painter.drawPixmap(piece, self.blackStone, image)
-        for i in range(0, len(self.whiteList)):
-            piece = QRect(int(self.contentsRect().width() / 9*i), 100, self.size, self.size)
-            painter.drawPixmap(piece, self.whiteStone, image)
-        painter.restore()
+        prisonWidth = self.contentsRect().width()
+        prisonHeight = self.contentsRect().height()
+        self.board.drawPrison(painter, prisonWidth,prisonHeight,self.size)

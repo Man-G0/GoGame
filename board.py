@@ -121,6 +121,7 @@ class Board(QFrame):  # base the board on a QFrame widget
                 rowTransformation = squareSide * 0.5 + squareSide * row
 
                 if (posX+squareSide * 0.3>colTransformation)&(posX-squareSide * 0.3<colTransformation)&(posY+squareSide * 0.3>rowTransformation)&(posY-squareSide * 0.3<rowTransformation)&(self.listPlayable[col][row]):
+                    self.updatePrison.emit("")
                     if self.skipnumber>0 :
                         self.skipnumber = 0
                     self.counter=20
@@ -131,13 +132,16 @@ class Board(QFrame):  # base the board on a QFrame widget
                         self.logic.addPiece('B',col,row)
                         self.logic.currentPlayer = "W"
                     self.go.cursor()
-                    self.updatePrison.emit("")
+
 
 
         self.clickLocationSignal.emit(self.logic.currentPlayer)
 
     def endGame(self,reason):
         self.widget_EndGame = QWidget()
+        self.timer.stop()
+        self.counter = 0
+        self.updateTimerSignal.emit(self.counter)
         self.widget_EndGame.setWindowIcon(QIcon("icon.png"))
         self.widget_EndGame.setMinimumSize(250,150)
         self.widget_EndGame.setWindowTitle("Game end")
@@ -243,5 +247,20 @@ class Board(QFrame):  # base the board on a QFrame widget
                         self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
                         painter.drawPixmap(piece, self.blackStone, image)
                 painter.restore()
+
+    def drawPrison(self,painter, prisonWidth, prisonHeight, size):
+        painter.fillRect(QRect(0, 0, prisonWidth, prisonHeight), self.go.backgroundColor)
+        self.blackList = self.logic.bCaptured
+        self.whiteList = self.logic.wCaptured
+        image = QRect(0, 0, 70, 70)
+        painter.save()
+        for i in range(0, len(self.blackList)):
+            piece = QRect(int(1/3*prisonWidth), int(prisonHeight / 49 * i), size, size)
+            painter.drawPixmap(piece, self.blackStone, image)
+
+        for i in range(0, len(self.whiteList)):
+            piece = QRect(int(2/3*prisonWidth),int(prisonHeight / 49*i), size, size)
+            painter.drawPixmap(piece, self.whiteStone, image)
+        painter.restore()
 
     
