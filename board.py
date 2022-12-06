@@ -132,9 +132,6 @@ class Board(QFrame):  # base the board on a QFrame widget
                         self.logic.addPiece('B',col,row)
                         self.logic.currentPlayer = "W"
                     self.go.cursor()
-
-
-
         self.clickLocationSignal.emit(self.logic.currentPlayer)
 
     def endGame(self,reason):
@@ -248,19 +245,6 @@ class Board(QFrame):  # base the board on a QFrame widget
                         painter.drawPixmap(piece, self.blackStone, image)
                 painter.restore()
 
-    def drawPrison(self,painter, prisonWidth, prisonHeight, size):
-        painter.fillRect(QRect(0, 0, prisonWidth, prisonHeight), self.go.backgroundColor)
-        self.blackList = self.logic.bCaptured
-        self.whiteList = self.logic.wCaptured
-        image = QRect(0, 0, 70, 70)
-        painter.save()
-        for i in range(0, len(self.blackList)):
-            piece = QRect(int(1/3*prisonWidth), int(prisonHeight / 49 * i), size, size)
-            painter.drawPixmap(piece, self.blackStone, image)
 
-        for i in range(0, len(self.whiteList)):
-            piece = QRect(int(2/3*prisonWidth),int(prisonHeight / 49*i), size, size)
-            painter.drawPixmap(piece, self.whiteStone, image)
-        painter.restore()
 
     
