@@ -87,7 +87,6 @@ class ScoreBoard(QWidget):
         '''updates the time remaining label to show the time remaining'''
         self.label_timeWRemaining.setText(str(int(timeWRemaining / 60))+" min "+str(timeWRemaining % 60)+" sec")
         val = int((timeWRemaining / self.board.totalTime)*100)
-        print(val)
         self.pbarWRemaining.setValue(val)
         if timeWRemaining < 30:
             self.label_timeWRemaining.setStyleSheet("color: red")
