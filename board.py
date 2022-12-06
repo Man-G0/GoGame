@@ -6,13 +6,16 @@ from PyQt6.QtTest import QTest
 from piece import Piece
 
 class Board(QFrame):  # base the board on a QFrame widget
-    updateTimerSignal = pyqtSignal(int) # signal sent when timer is updated
+    updateTimerBSignal = pyqtSignal(int) # signal sent when timer is updated
+    updateTimerWSignal = pyqtSignal(int)
     clickLocationSignal = pyqtSignal(str) # signal sent when there is a new click location
     updatePrison = pyqtSignal(str)
     boardWidth  = 6    # board is 6 squares wide
     boardHeight = 6     # board is 6 squares high
     timerSpeed  = 1000     # the timer updates every 1 second
-    counter     = 20    # the number the counter will count down from
+    totalTime = 120
+    counterB = totalTime    # the number the counter will count down from
+    counterW = totalTime
 
     def __init__(self, parent, logic):
         super().__init__(parent)
@@ -24,7 +27,6 @@ class Board(QFrame):  # base the board on a QFrame widget
         '''initiates board'''
         self.timer = QBasicTimer()  # create a timer for the game
         self.isStarted = False      # game is not currently started
-        self.start()                # start the game which will start the timer
         self.setMinimumSize(300, 300)
         self.skipnumber = 0;
 
@@ -76,10 +78,16 @@ class Board(QFrame):  # base the board on a QFrame widget
     def timerEvent(self, event):
         '''this event is automatically called when the timer is updated. based on the timerSpeed variable '''
         if event.timerId() == self.timer.timerId():  # if the timer that has 'ticked' is the one in this class
-            if self.counter == 0:
-                self.skipTurn()
-            self.counter -= 1
-            self.updateTimerSignal.emit(self.counter)
+            if self.logic.currentPlayer == "B":
+                if self.counterB == 0:
+                    self.endGame("BNoTime")
+                self.counterB -= 1
+                self.updateTimerBSignal.emit(self.counterB)
+            elif self.logic.currentPlayer == "W":
+                if self.counterW == 0:
+                    self.endGame("WNoTime")
+                self.counterW -= 1
+                self.updateTimerWSignal.emit(self.counterW)
         else:
             super(Board, self).timerEvent(event)      # if we do not handle an event we should pass it to the super
                                                         # class for handling
@@ -121,6 +129,8 @@ class Board(QFrame):  # base the board on a QFrame widget
                 rowTransformation = squareSide * 0.5 + squareSide * row
 
                 if (posX+squareSide * 0.3>colTransformation)&(posX-squareSide * 0.3<colTransformation)&(posY+squareSide * 0.3>rowTransformation)&(posY-squareSide * 0.3<rowTransformation)&(self.listPlayable[col][row]):
+                    if not self.isStarted:
+                        self.start()  # start the game which will start the timer
                     self.updatePrison.emit("")
                     if self.skipnumber>0 :
                         self.skipnumber = 0
@@ -134,7 +144,7 @@ class Board(QFrame):  # base the board on a QFrame widget
                     self.go.cursor()
         self.clickLocationSignal.emit(self.logic.currentPlayer)
 
-    def endGame(self,reason):
+    def endGame(self, reason):
         self.widget_EndGame = QWidget()
         self.timer.stop()
         self.counter = 0
@@ -144,8 +154,12 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.widget_EndGame.setWindowTitle("Game end")
         label_end= QLabel("The game has ended !")
         label_reason = QLabel()
-        if reason=="2 skips":
+        if reason == "2 skips":
             label_reason.setText("Both players skipped their turn")
+        elif reason == "BNoTime":
+            label_reason.setText("BNoTime")
+        elif reason == "WNoTime":
+            label_reason.setText("WNoTime")
 
 
         layout_buttonsEnd = QHBoxLayout()
