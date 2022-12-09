@@ -27,7 +27,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         '''initiates board'''
         self.timer = QBasicTimer()  # create a timer for the game
         self.isStarted = False      # game is not currently started
-        self.setMinimumSize(300, 300)
+        self.setMinimumSize(500, 500)
         self.skipnumber = 0;
 
         if self.squareWidth() <= self.squareHeight():
@@ -40,13 +40,13 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
 
     def resizeEvent(self, event):
-        # Create a square base size of 10x10 and scale it to the new size
-        # maintaining aspect ratio.
+
         if self.contentsRect().height() > self.contentsRect().width():
             new_size = QtCore.QSize(self.contentsRect().width(), self.contentsRect().width())
         else:
             new_size = QtCore.QSize(self.contentsRect().height(), self.contentsRect().height())
         self.resize(new_size)
+        self.go.resize(QSize(self.go.contentsRect().width(),self.contentsRect().height()))
 
         if self.squareWidth()<=self.squareHeight():
             squareSide = self.squareWidth()
@@ -99,6 +99,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         if self.skipnumber<2:
             if self.logic.currentPlayer == "W":
                 self.logic.currentPlayer = "B"
+                #self.logic.bCaptured.append(Piece("W", -1, -1))
             elif self.logic.currentPlayer == "B":
                 self.logic.currentPlayer = "W"
             self.go.cursor()
@@ -156,26 +157,19 @@ class Board(QFrame):  # base the board on a QFrame widget
         label_reason = QLabel()
         if reason == "2 skips":
             label_reason.setText("Both players skipped their turn")
+            label_deadStone = QLabel("You can now choose to remove the dead stones")
         elif reason == "BNoTime":
-            label_reason.setText("BNoTime")
+            label_reason.setText("Black has no time left")
         elif reason == "WNoTime":
-            label_reason.setText("WNoTime")
+            label_reason.setText("White has no time left")
 
 
-        layout_buttonsEnd = QHBoxLayout()
-
-        button_restart = QPushButton("restart")
-        #button_restart.clicked.connect(self.restart)
-        layout_buttonsEnd.addWidget(button_restart)
-
-        button_exit = QPushButton("exit")
-        #button_exit.clicked.connect(self.exit)
-        layout_buttonsEnd.addWidget(button_exit)
 
         layout_end = QVBoxLayout()
         layout_end.addWidget(label_end)
         layout_end.addWidget(label_reason)
-        layout_end.addLayout(layout_buttonsEnd)
+        if reason == "2 skips":
+            layout_end.addWidget(label_deadStone)
         self.widget_EndGame.setLayout(layout_end)
 
         self.widget_EndGame.show()
@@ -183,6 +177,17 @@ class Board(QFrame):  # base the board on a QFrame widget
         screen = self.screen().availableGeometry().center()
         gr.moveCenter(screen)
         self.widget_EndGame.move(gr.topLeft())
+
+    def endChoices(self):
+        layout_buttonsEnd = QHBoxLayout()
+
+        button_restart = QPushButton("restart")
+        # button_restart.clicked.connect(self.restart)
+        layout_buttonsEnd.addWidget(button_restart)
+
+        button_exit = QPushButton("exit")
+        # button_exit.clicked.connect(self.exit)
+        layout_buttonsEnd.addWidget(button_exit)
     def resetGame(self):
         '''clears pieces from the board'''
         painter = QPainter()

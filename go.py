@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt, QPoint, QSize
-from PyQt6.QtGui import QCursor, QPixmap, QColor, QIcon, QPainter
+from PyQt6.QtGui import QCursor, QPixmap, QColor, QIcon, QPainter, QAction
 from board import Board
 from prison import Prison
 from game_logic import GameLogic
@@ -40,6 +40,22 @@ class Go(QMainWindow):
         self.scoreBoard = ScoreBoard(self.board)
 
         self.setCentralWidget(Layout(self.board, self.scoreBoard, self.prison))
+
+        # set up menus
+        mainMenu = self.menuBar()  # create a menu bar
+        mainMenu.setStyleSheet("background-color: #D6E0F8; background-image: url(icons/Empty.png)")
+        mainMenu.setNativeMenuBar(False)
+        fileMenu = mainMenu.addMenu(" File")  # add the file menu to the menu bar
+        helpMenu = mainMenu.addMenu(" Help")  # add the "Help" menu to the menu bar
+
+        # save menu item
+        saveAction = QAction(QIcon("./icons/save.png"), "Save",
+                             self)
+        saveAction.setShortcut(
+            "Ctrl+S")  # connect this save action to a keyboard shortcut, documentation: https://doc.qt.io/qt-6/qaction.html#shortcut-prop
+        fileMenu.addAction(
+            saveAction)  # add the save action to the file menu, documentation: https://doc.qt.io/qt-6/qwidget.html#addAction
+        # saveAction.triggered.connect(self.draw.save)
 
         self.resize(1000, 650)
         self.center()

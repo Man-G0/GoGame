@@ -25,6 +25,8 @@ class Prison(QFrame):
 
         self.capturedWhite = QLabel(str(len(self.whiteList)))
         self.capturedBlack = QLabel(str(len(self.blackList)))
+        #self.capturedBlack.setStyleSheet("background-color : white")
+
         self.prisonLayout = QVBoxLayout()
         self.prisonLayout.addStretch(1)
         self.scoreLayout = QHBoxLayout()
@@ -39,7 +41,7 @@ class Prison(QFrame):
     def resizeEvent(self, event):
         # Create a square base size of 10x10 and scale it to the new size
         # maintaining aspect ratio.
-        new_size = QtCore.QSize(int(self.board.width()*2/5), self.board.contentsRect().height())
+        new_size = QSize(int(self.board.width()*2/5), self.board.contentsRect().height())
         self.resize(new_size)
         self.size = int(self.contentsRect().width() / 4)
 
