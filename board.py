@@ -155,6 +155,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.widget_EndGame.setWindowTitle("Game end")
         label_end = QLabel("The game has ended !")
         label_reason = QLabel()
+        self.isStarted = False
         if reason == "2 skips":
             label_reason.setText("Both players skipped their turn")
             label_deadStone = QLabel("You can now choose to remove the dead stones")
