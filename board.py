@@ -145,6 +145,9 @@ class Board(QFrame):  # base the board on a QFrame widget
                         self.logic.addPiece('B',col,row)
                         self.logic.currentPlayer = "W"
                     self.go.cursor()
+                    self.logic.calcTerritori()
+                    self.go.scoreBoard.labelTerritoriW.setText("White Territories : " + str(self.logic.territoriW))
+                    self.go.scoreBoard.labelTerritoriB.setText("Black Territories : " + str(self.logic.territoriB))
         self.clickLocationSignal.emit(self.logic.currentPlayer)
 
     def endGame(self, reason):

@@ -13,6 +13,8 @@ class GameLogic:
             self.piecesArray.append(yArray)
         self.lastGrid = [self.duplicateGrid()]
         self.currentPlayer = "B"
+        self.territoriB = 0
+        self.territoriW = 0
 
     def addPiece(self, color, x, y):
         self.piecesArray[x][y] = Piece(color, x, y)
@@ -152,7 +154,7 @@ class GameLogic:
             i -= 1
         return inPrevious
 
-    def calcPoint(self):
+    def calcTerritori(self):
         duplicate = self.duplicateGrid()
         for i in range(self.xSize):
             for j in range(self.ySize):
@@ -168,7 +170,7 @@ class GameLogic:
                         group += 1
                         listColorNear.append(duplicate[i][j].calcGroup(self.xSize, self.ySize, group, duplicate))
 
-        for i in range(group-1):
+        for i in range(group):
             if "B" in listColorNear[i] and "W" in listColorNear[i]:
                 listColorNear[i] = "both"
             elif "B" in listColorNear[i]:
@@ -176,15 +178,25 @@ class GameLogic:
             elif "W" in listColorNear[i]:
                 listColorNear[i] = "W"
 
-        scoreB = 0
-        scoreW = 0
+        self.territoriB = 0
+        self.territoriW = 0
+
         for i in range(self.xSize):
             for j in range(self.ySize):
                 if type(duplicate[i][j]) == Empty:
                     if listColorNear[duplicate[i][j].group-1] == 'B':
-                        scoreB += 1
+                        self.territoriB += 1
                     if listColorNear[duplicate[i][j].group-1] == 'W':
-                        scoreW += 1
+                        self.territoriW += 1
+
+    def calcPoint(self):
+        scoreB = 0
+        scoreW = 0
+
+        self.calcTerritori(self)
+
+        scoreB = self.territoriB
+        scoreW = self.territoriW
 
         scoreB -= len(self.bCaptured) + 6.5
         scoreW -= len(self.wCaptured)
