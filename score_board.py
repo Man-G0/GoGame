@@ -30,16 +30,7 @@ class ScoreBoard(QWidget):
         self.label_timeBRemaining = QLabel(str(int(self.board.counterB / 60))+" min "+str(self.board.counterB % 60)+" sec")
         self.pbarBRemaining = QProgressBar(self, textVisible=False)
 
-        self.pbarBRemaining.setStyleSheet("QProgressBar"
-                                          "{"
-                                          "border: solid grey;"
-                                          "border-radius: 5px;"
-                                          "}"
-                                          "QProgressBar::chunk "
-                                          "{"
-                                          "background-color: # 05B8CC;"
-                                          "border-radius :15px;"
-                                          "}")
+
 
         self.pbarBRemaining.setValue(100)
         self.labelTerritoriB = QLabel("Black Territories : " + str(self.board.logic.territoriB))
@@ -49,7 +40,7 @@ class ScoreBoard(QWidget):
         layoutB.addWidget(self.pbarBRemaining)
         layoutB.addWidget(self.labelTerritoriB)
         widgetB.setLayout(layoutB)
-        widgetB.setStyleSheet("background-color: #000000;color : white")
+        widgetB.setStyleSheet("background-color: #000000 ;color : white ;border-radius: 15px;")
 
 
         widgetW = QWidget()
@@ -64,7 +55,7 @@ class ScoreBoard(QWidget):
         layoutW.addWidget(self.pbarWRemaining)
         layoutW.addWidget(self.labelTerritoriW)
         widgetW.setLayout(layoutW)
-        widgetW.setStyleSheet("background-color: #FFFFFF")
+        widgetW.setStyleSheet("background-color: #FFFFFF; border-radius: 15px;")
 
         self.mainLayout.addWidget(self.label_playerTurn)
         self.mainLayout.addStretch(1)
