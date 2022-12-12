@@ -13,7 +13,7 @@ class Board(QFrame):  # base the board on a QFrame widget
     boardWidth  = 6    # board is 6 squares wide
     boardHeight = 6     # board is 6 squares high
     timerSpeed  = 1000     # the timer updates every 1 second
-    totalTime = 120
+    totalTime = 30 #120
     counterB = totalTime    # the number the counter will count down from
     counterW = totalTime
 
@@ -28,7 +28,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.timer = QBasicTimer()  # create a timer for the game
         self.isStarted = False      # game is not currently started
         self.setMinimumSize(500, 500)
-        self.skipnumber = 0;
+        self.skipnumber = 0
 
         if self.squareWidth() <= self.squareHeight():
             squareSide = self.squareWidth()
@@ -46,7 +46,6 @@ class Board(QFrame):  # base the board on a QFrame widget
         else:
             new_size = QtCore.QSize(self.contentsRect().height(), self.contentsRect().height())
         self.resize(new_size)
-        self.go.resize(QSize(self.go.contentsRect().width(),self.contentsRect().height()))
         self.go.scoreBoard.resize(QSize(self.go.scoreBoard.contentsRect().width(), self.contentsRect().height()))
         if self.squareWidth()<=self.squareHeight():
             squareSide = self.squareWidth()
@@ -164,6 +163,7 @@ class Board(QFrame):  # base the board on a QFrame widget
             label_deadStone = QLabel("You can now choose to remove the dead stones")
         elif reason == "BNoTime":
             label_reason.setText("Black has no time left")
+
         elif reason == "WNoTime":
             label_reason.setText("White has no time left")
 
@@ -186,7 +186,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         layout_buttonsEnd = QHBoxLayout()
 
         button_restart = QPushButton("restart")
-        # button_restart.clicked.connect(self.restart)
+        button_restart.clicked.connect(self.resetGame)
         layout_buttonsEnd.addWidget(button_restart)
 
         button_exit = QPushButton("exit")
@@ -195,8 +195,12 @@ class Board(QFrame):  # base the board on a QFrame widget
     def resetGame(self):
         '''clears pieces from the board'''
         painter = QPainter()
+        self.go.logic.__init__()
         self.drawBoardSquares(painter)
-
+        self.counterB = self.totalTime  # the number the counter will count down from
+        self.counterW = self.totalTime
+        self.go.scoreBoard.setTimeWRemaining(self.counterW)
+        self.go.scoreBoard.setTimeBRemaining(self.counterB)
     def playablePosition(self,painter):
 
         if self.logic.currentPlayer == "W":
