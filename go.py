@@ -10,8 +10,16 @@ from score_board import ScoreBoard
 class Go(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.backgroundColor = QColor("#E0BD6B")
+        self.backgroundBoardColorhex = "#E0BD6B"
+        self.backgroundWindowColorhex = "#D6E0F8"
+        self.backgroundMenuColorhex = "#A3122B"
+        self.textWindowColorhex = "#2040A9"
+        self.textMenuColorhex = "#20F039"
+        self.textPrisonColorhex = "#003333"
+
+        self.backgroundBoardColor = QColor(self.backgroundBoardColorhex)
         self.gridColor = Qt.GlobalColor.black
+        self.setStyleSheet("background-color:"+str(self.backgroundWindowColorhex) +"; color : "+str(self.textWindowColorhex))
         self.setWindowIcon(QIcon("icon.png"))
         self.initLogic()
         self.initUI()
@@ -46,7 +54,7 @@ class Go(QMainWindow):
 
         # set up menus
         mainMenu = self.menuBar()  # create a menu bar
-        mainMenu.setStyleSheet("background-color: #D6E0F8")
+        mainMenu.setStyleSheet("background-color:" + str(self.backgroundMenuColorhex) + "; color:" + str(self.textMenuColorhex))
         mainMenu.setNativeMenuBar(False)
         fileMenu = mainMenu.addMenu(" File")  # add the file menu to the menu bar
         helpMenu = mainMenu.addMenu(" Help")  # add the "Help" menu to the menu bar
@@ -99,7 +107,7 @@ class Go(QMainWindow):
         self.rulesWidget = QWidget()
         self.rulesWidget.setWindowTitle("rules")
         self.rulesWidget.setWindowIcon(QIcon("rules-icon.png"))
-        #self.rulesWidget.setStyleSheet("background-color:"+self.draw.backgroundColor)
+        #self.rulesWidget.setStyleSheet("background-color:"+self.draw.backgroundBoardColor)
 
         rulesLayout = QVBoxLayout()
 
