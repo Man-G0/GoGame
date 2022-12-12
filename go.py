@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel, QVBoxLayout
 from PyQt6.QtCore import Qt, QPoint, QSize
 from PyQt6.QtGui import QCursor, QPixmap, QColor, QIcon, QPainter, QAction
 from board import Board
@@ -16,7 +16,9 @@ class Go(QMainWindow):
         self.initLogic()
         self.initUI()
 
-
+    """def resizeEvent(self, event):
+        self.resize(QSize(self.contentsRect().width(), self.board.contentsRect().height()))
+        self.scoreBoard.resize(QSize(self.scoreBoard.contentsRect().width(), self.board.contentsRect().height()))"""
     def initLogic(self):
         self.logic = GameLogic()
 
@@ -57,6 +59,23 @@ class Go(QMainWindow):
             saveAction)  # add the save action to the file menu, documentation: https://doc.qt.io/qt-6/qwidget.html#addAction
         # saveAction.triggered.connect(self.draw.save)
 
+        # Help Menu
+        rulesAction = QAction(QIcon("rules-icon.png"), "Rules", self)
+        helpMenu.addAction(rulesAction)
+        rulesAction.triggered.connect(self.rules)
+        rulesAction.setShortcut("Ctrl+I")
+
+        """contactAction = QAction(QIcon("./icons/support-icon.png"), "Contact us", self)
+        contactAction.setShortcut("Ctrl+*")
+        helpMenu.addAction(contactAction)
+        contactAction.triggered.connect(self.contact)
+
+        AboutUsAction = QAction(QIcon("./icons/dizzy-person.png"), "About us", self)
+        AboutUsAction.setShortcut("Ctrl+U")
+        helpMenu.addAction(AboutUsAction)
+        AboutUsAction.triggered.connect(self.about)"""
+
+
         self.resize(1000, 650)
         self.center()
         self.setWindowTitle('Go')
@@ -76,6 +95,39 @@ class Go(QMainWindow):
         self.move(gr.topLeft())
 
 
+    def rules(self):
+        self.rulesWidget = QWidget()
+        self.rulesWidget.setWindowTitle("rules")
+        self.rulesWidget.setWindowIcon(QIcon("rules-icon.png"))
+        #self.rulesWidget.setStyleSheet("background-color:"+self.draw.backgroundColor)
+
+        rulesLayout = QVBoxLayout()
+
+        # Display of the Drawing role icon
+        self.drawingHbox = QHBoxLayout()
+
+        qLabelDrawingText = QLabel()
+        qLabelDrawingText.setText("Drawing player: Draw the word +2 points")
+        self.drawingHbox.addWidget(qLabelDrawingText)
+        self.drawingHbox.addStretch(3)
+        rulesLayout.addLayout(self.drawingHbox)
+
+        #Display of the Guessing role icon
+        self.guessingHbox = QHBoxLayout()
+        qLabelGuessingText = QLabel()
+        qLabelGuessingText.setText("Guessing player: Find the word! +1 point")
+        self.guessingHbox.addWidget(qLabelGuessingText)
+        self.guessingHbox.addStretch(3)
+        rulesLayout.addLayout(self.guessingHbox)
+
+        #Text part of the rules
+        rulesText = QLabel()
+        rulesText.setText("\t\tMay the best win")
+        rulesLayout.addWidget(rulesText)
+
+        self.rulesWidget.setLayout(rulesLayout)
+
+        self.rulesWidget.show()
 
 
 class Layout(QWidget):

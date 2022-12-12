@@ -47,7 +47,7 @@ class Board(QFrame):  # base the board on a QFrame widget
             new_size = QtCore.QSize(self.contentsRect().height(), self.contentsRect().height())
         self.resize(new_size)
         self.go.resize(QSize(self.go.contentsRect().width(),self.contentsRect().height()))
-
+        self.go.scoreBoard.resize(QSize(self.go.scoreBoard.contentsRect().width(), self.contentsRect().height()))
         if self.squareWidth()<=self.squareHeight():
             squareSide = self.squareWidth()
         else:
