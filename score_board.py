@@ -24,27 +24,44 @@ class ScoreBoard(QWidget):
         self.label_playerTurn = QLabel("Turn to player Black")
         self.button_skipTurn = QPushButton("Skip turn")
 
+        widgetB = QWidget()
         self.button_skipTurn.clicked.connect(self.board.skipTurn)
         self.label_timeB = QLabel("Time left for black : ")
         self.label_timeBRemaining = QLabel(str(int(self.board.counterB / 60))+" min "+str(self.board.counterB % 60)+" sec")
         self.pbarBRemaining = QProgressBar(self, textVisible=False)
-        self.pbarBRemaining.setValue(100)
 
+
+
+        self.pbarBRemaining.setValue(100)
+        self.labelTerritoriB = QLabel("Black Territories : " + str(self.board.logic.territoriB))
+        layoutB = QVBoxLayout()
+        layoutB.addWidget(self.label_timeB)
+        layoutB.addWidget(self.label_timeBRemaining)
+        layoutB.addWidget(self.pbarBRemaining)
+        layoutB.addWidget(self.labelTerritoriB)
+        widgetB.setLayout(layoutB)
+        widgetB.setStyleSheet("background-color: #000000 ;color : white ;border-radius: 15px;")
+
+
+        widgetW = QWidget()
         self.label_timeW = QLabel("Time left for white : ")
         self.label_timeWRemaining = QLabel(str(int(self.board.counterW / 60))+" min "+str(self.board.counterW % 60)+" sec")
         self.pbarWRemaining = QProgressBar(self,  textVisible=False)
         self.pbarWRemaining.setValue(100)
-
+        self.labelTerritoriW = QLabel("White Territories : " + str(self.board.logic.territoriW))
+        layoutW = QVBoxLayout()
+        layoutW.addWidget(self.label_timeW)
+        layoutW.addWidget(self.label_timeWRemaining)
+        layoutW.addWidget(self.pbarWRemaining)
+        layoutW.addWidget(self.labelTerritoriW)
+        widgetW.setLayout(layoutW)
+        widgetW.setStyleSheet("background-color: #FFFFFF; border-radius: 15px;")
 
         self.mainLayout.addWidget(self.label_playerTurn)
         self.mainLayout.addStretch(1)
-        self.mainLayout.addWidget(self.label_timeB)
-        self.mainLayout.addWidget(self.label_timeBRemaining)
-        self.mainLayout.addWidget(self.pbarBRemaining)
+        self.mainLayout.addWidget(widgetB)
         self.mainLayout.addStretch(1)
-        self.mainLayout.addWidget(self.label_timeW)
-        self.mainLayout.addWidget(self.label_timeWRemaining)
-        self.mainLayout.addWidget(self.pbarWRemaining)
+        self.mainLayout.addWidget(widgetW)
         self.mainLayout.addStretch(6)
         self.mainLayout.addWidget(self.button_skipTurn)
         self.make_connection(board)
@@ -80,7 +97,7 @@ class ScoreBoard(QWidget):
         if timeBRemaining < 30:
             self.label_timeBRemaining.setStyleSheet("color: red")
         else:
-            self.label_timeBRemaining.setStyleSheet("color: black")
+            self.label_timeBRemaining.setStyleSheet("color: white")
 
     @pyqtSlot(int)
     def setTimeWRemaining(self, timeWRemaining):
