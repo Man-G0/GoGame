@@ -43,7 +43,7 @@ class Go(QMainWindow):
 
         # set up menus
         mainMenu = self.menuBar()  # create a menu bar
-        mainMenu.setStyleSheet("background-color: #D6E0F8; background-image: url(icons/Empty.png)")
+        mainMenu.setStyleSheet("background-color: #D6E0F8")
         mainMenu.setNativeMenuBar(False)
         fileMenu = mainMenu.addMenu(" File")  # add the file menu to the menu bar
         helpMenu = mainMenu.addMenu(" Help")  # add the "Help" menu to the menu bar
