@@ -32,16 +32,17 @@ class Go(QMainWindow):
         '''initiates application UI'''
         self.board = Board(self, self.logic)
         self.prison = Prison(self,self.board)
-        if self.board.squareWidth() <= self.board.squareHeight():
-            squareSide = self.board.squareWidth()
-        else:
-            squareSide = self.board.squareHeight()
+
         self.cursor_pix_white = QPixmap('WhiteStone.png')
         self.cursor_pix_black = QPixmap('BlackStone.png')
 
         self.scoreBoard = ScoreBoard(self.board)
 
-        self.setCentralWidget(Layout(self.board, self.scoreBoard, self.prison))
+        self.mainLayout = Layout(self.board, self.scoreBoard, self.prison)
+
+
+
+        self.setCentralWidget(self.mainLayout)
 
         # set up menus
         mainMenu = self.menuBar()  # create a menu bar
@@ -132,8 +133,13 @@ class Go(QMainWindow):
 class Layout(QWidget):
     def __init__(self, board, scoreBoard, prison):
         super().__init__()
+
+        self.prisonSize = 1
+        self.boardSize = 3
+        self.scoreSize = 1
+
         hbox = QHBoxLayout()
-        hbox.addWidget(prison, 1)
-        hbox.addWidget(board, 3)
-        hbox.addWidget(scoreBoard, 1)
+        hbox.addWidget(prison, self.prisonSize)
+        hbox.addWidget(board, self.boardSize)
+        hbox.addWidget(scoreBoard, self.scoreSize)
         self.setLayout(hbox)
