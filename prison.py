@@ -53,11 +53,12 @@ class Prison(QFrame):
         self.setMinimumSize(int(self.board.width()*2/5), self.board.height())
         prisonWidth = self.width()
         prisonHeight = self.height()
-        painter.fillRect(QRect(0, 0, prisonWidth, prisonHeight), self.go.backgroundColor)
+        painter.fillRect(QRect(0, 0, prisonWidth, prisonHeight), self.go.backgroundBoardColor)
         self.blackList = self.board.logic.bCaptured
         self.whiteList = self.board.logic.wCaptured
         image = QRect(0, 0, 70, 70)
         painter.save()
+        self.setStyleSheet("background-color:" +str(self.go.backgroundBoardColorhex) + "; color : " + str(self.go.textPrisonColorhex) +"; font-weight: bold")
 
         if len(self.blackList)<=20:
             lenB = len(self.blackList)+1

@@ -10,8 +10,16 @@ from score_board import ScoreBoard
 class Go(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.backgroundColor = QColor("#E0BD6B")
+        self.backgroundBoardColorhex = "#E0BD6B"
+        self.backgroundWindowColorhex = "#D6E0F8"
+        self.backgroundMenuColorhex = "#A3122B"
+        self.textWindowColorhex = "#2040A9"
+        self.textMenuColorhex = "#20F039"
+        self.textPrisonColorhex = "#003333"
+
+        self.backgroundBoardColor = QColor(self.backgroundBoardColorhex)
         self.gridColor = Qt.GlobalColor.black
+        self.setStyleSheet("background-color:"+str(self.backgroundWindowColorhex) +"; color : "+str(self.textWindowColorhex))
         self.setWindowIcon(QIcon("icon.png"))
         self.initLogic()
         self.initUI()
@@ -32,20 +40,21 @@ class Go(QMainWindow):
         '''initiates application UI'''
         self.board = Board(self, self.logic)
         self.prison = Prison(self,self.board)
-        if self.board.squareWidth() <= self.board.squareHeight():
-            squareSide = self.board.squareWidth()
-        else:
-            squareSide = self.board.squareHeight()
+
         self.cursor_pix_white = QPixmap('WhiteStone.png')
         self.cursor_pix_black = QPixmap('BlackStone.png')
 
         self.scoreBoard = ScoreBoard(self.board)
 
-        self.setCentralWidget(Layout(self.board, self.scoreBoard, self.prison))
+        self.mainLayout = Layout(self.board, self.scoreBoard, self.prison)
+
+
+
+        self.setCentralWidget(self.mainLayout)
 
         # set up menus
         mainMenu = self.menuBar()  # create a menu bar
-        mainMenu.setStyleSheet("background-color: #D6E0F8")
+        mainMenu.setStyleSheet("background-color:" + str(self.backgroundMenuColorhex) + "; color:" + str(self.textMenuColorhex))
         mainMenu.setNativeMenuBar(False)
         fileMenu = mainMenu.addMenu(" File")  # add the file menu to the menu bar
         helpMenu = mainMenu.addMenu(" Help")  # add the "Help" menu to the menu bar
@@ -98,7 +107,7 @@ class Go(QMainWindow):
         self.rulesWidget = QWidget()
         self.rulesWidget.setWindowTitle("rules")
         self.rulesWidget.setWindowIcon(QIcon("rules-icon.png"))
-        #self.rulesWidget.setStyleSheet("background-color:"+self.draw.backgroundColor)
+        #self.rulesWidget.setStyleSheet("background-color:"+self.draw.backgroundBoardColor)
 
         rulesLayout = QVBoxLayout()
 
@@ -132,8 +141,13 @@ class Go(QMainWindow):
 class Layout(QWidget):
     def __init__(self, board, scoreBoard, prison):
         super().__init__()
+
+        self.prisonSize = 1
+        self.boardSize = 3
+        self.scoreSize = 1
+
         hbox = QHBoxLayout()
-        hbox.addWidget(prison, 1)
-        hbox.addWidget(board, 3)
-        hbox.addWidget(scoreBoard, 1)
+        hbox.addWidget(prison, self.prisonSize)
+        hbox.addWidget(board, self.boardSize)
+        hbox.addWidget(scoreBoard, self.scoreSize)
         self.setLayout(hbox)

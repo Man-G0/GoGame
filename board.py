@@ -230,7 +230,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.brushSize = 3
         self.brushColor = Qt.GlobalColor.black
         painter.setPen(QPen(self.brushColor, self.brushSize))
-        painter.fillRect(QRect(0, 0, self.contentsRect().width(), self.contentsRect().height()),self.go.backgroundColor)
+        painter.fillRect(QRect(0, 0, self.contentsRect().width(), self.contentsRect().height()),self.go.backgroundBoardColor)
 
         if self.squareWidth()<=self.squareHeight():
             squareSide = self.squareWidth()
@@ -244,7 +244,7 @@ class Board(QFrame):  # base the board on a QFrame widget
                 painter.fillRect(QRect(int(colTransformation),int(rowTransformation),int(squareSide),int(squareSide)),QColor("#E0BD6B"))
                 painter.drawRect(QRect(int(colTransformation),int(rowTransformation),int(squareSide),int(squareSide)))
                 painter.restore()
-                self.brushColor = self.go.backgroundColor
+                self.brushColor = self.go.backgroundBoardColor
 
 
 

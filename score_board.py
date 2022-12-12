@@ -40,7 +40,7 @@ class ScoreBoard(QWidget):
         layoutB.addWidget(self.pbarBRemaining)
         layoutB.addWidget(self.labelTerritoriB)
         widgetB.setLayout(layoutB)
-        widgetB.setStyleSheet("background-color: #000000 ;color : white ;border-radius: 15px")
+        widgetB.setStyleSheet("background-color: black ;color : white ;border-radius: 15px")
 
 
         widgetW = QWidget()
@@ -55,7 +55,7 @@ class ScoreBoard(QWidget):
         layoutW.addWidget(self.pbarWRemaining)
         layoutW.addWidget(self.labelTerritoriW)
         widgetW.setLayout(layoutW)
-        widgetW.setStyleSheet("background-color: #FFFFFF; border-radius: 15px")
+        widgetW.setStyleSheet("background-color: white ;color : black; border-radius: 15px")
 
         self.mainLayout.addWidget(self.label_playerTurn)
         self.mainLayout.addStretch(1)
