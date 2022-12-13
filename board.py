@@ -1,3 +1,5 @@
+import sys
+
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QFrame, QWidget, QVBoxLayout, QLabel, QGridLayout, QHBoxLayout, QSizePolicy, QPushButton
 from PyQt6.QtCore import Qt, QBasicTimer, pyqtSignal, QPointF, QPoint, QRect, QSize
@@ -29,6 +31,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.isStarted = False      # game is not currently started
         self.setMinimumSize(500, 500)
         self.skipnumber = 0
+        self.restart = QWidget()
 
         if self.squareWidth() <= self.squareHeight():
             squareSide = self.squareWidth()
@@ -159,10 +162,25 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.widget_EndGame.setWindowTitle("Game end")
         label_end = QLabel("The game has ended !")
         label_reason = QLabel()
+
+        layout_buttonsEnd = QHBoxLayout()
+
+        button_restart = QPushButton("Restart")
+        button_restart.clicked.connect(self.resetGame)
+        layout_buttonsEnd.addWidget(button_restart)
+
+        buttonDeadStones = QPushButton("dead stones ?")
+        button_restart.clicked.connect(self.deadStoneEvent)
+
+        button_exit = QPushButton("Exit")
+        button_exit.clicked.connect(self.exitEvent)
+        layout_buttonsEnd.addWidget(button_exit)
+
         self.isStarted = False
         if reason == "2 skips":
             label_reason.setText("Both players skipped their turn")
             label_deadStone = QLabel("You can now choose to remove the dead stones")
+            layout_buttonsEnd.addWidget(buttonDeadStones)
         elif reason == "BNoTime":
             label_reason.setText("Black has no time left")
             self.endChoices()
@@ -170,33 +188,30 @@ class Board(QFrame):  # base the board on a QFrame widget
         elif reason == "WNoTime":
             label_reason.setText("White has no time left")
 
+        layout_buttonsEnd.addWidget(button_exit)
+
         layout_end = QVBoxLayout()
         layout_end.addWidget(label_end)
         layout_end.addWidget(label_reason)
         if reason == "2 skips":
             layout_end.addWidget(label_deadStone)
+
+        layout_end.addLayout(layout_buttonsEnd)
         self.widget_EndGame.setLayout(layout_end)
 
         self.widget_EndGame.show()
+
         gr = self.widget_EndGame.frameGeometry()
         screen = self.screen().availableGeometry().center()
         gr.moveCenter(screen)
         self.widget_EndGame.move(gr.topLeft())
 
-    def endChoices(self):
-        layout_buttonsEnd = QHBoxLayout()
-
-        button_restart = QPushButton("restart")
-        button_restart.clicked.connect(self.resetGame)
-        layout_buttonsEnd.addWidget(button_restart)
-
-        button_exit = QPushButton("exit")
-        # button_exit.clicked.connect(self.exit)
-        layout_buttonsEnd.addWidget(button_exit)
-
-
+    def exitEvent(self):
+        sys.exit(self.go.app.exec())
+    def deadStoneEvent(self):
+        self.widget_EndGame.hide()
     def buttonRestartEvent(self):
-        self.restart = QWidget()
+
         self.restart.setWindowTitle("restart")
         self.restart.setWindowIcon(QIcon("./assets/icon.png"))
         self.restart.setStyleSheet("background-color:" + self.go.backgroundWindowColorhex)
@@ -235,6 +250,8 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.restart.hide()
     def resetGame(self):
         '''clears pieces from the board'''
+        if self.restart.isVisible():
+            self.restart.hide()
         painter = QPainter()
         self.go.logic.__init__()
         self.drawBoardSquares(painter)
@@ -244,7 +261,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.go.scoreBoard.labelTerritoriB.setText("Black Territories : " + str(self.logic.territoriB))
         self.go.scoreBoard.setTimeWRemaining(self.counterW)
         self.go.scoreBoard.setTimeBRemaining(self.counterB)
-        self.restart.hide()
+
     def playablePosition(self,painter):
 
         if self.logic.currentPlayer == "W":

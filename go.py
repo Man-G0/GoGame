@@ -8,8 +8,9 @@ from score_board import ScoreBoard
 
 
 class Go(QMainWindow):
-    def __init__(self):
+    def __init__(self,app):
         super().__init__()
+        self.app = app
         self.backgroundBoardColorhex = "#AF000D"
         self.backgroundWindowColorhex = "#FFE3C6"
         self.backgroundMenuColorhex = "#5E0603"
