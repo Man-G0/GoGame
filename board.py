@@ -145,6 +145,7 @@ class Board(QFrame):  # base the board on a QFrame widget
                     elif self.logic.currentPlayer == "B":
                         self.logic.addPiece('B',col,row)
                         self.logic.currentPlayer = "W"
+                    print("jusqu'ici tout va bien")
                     self.go.cursor()
                     self.logic.calcTerritori()
                     self.go.scoreBoard.labelTerritoriW.setText("White Territories : " + str(self.logic.territoriW))
