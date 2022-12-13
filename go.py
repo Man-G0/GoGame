@@ -106,35 +106,97 @@ class Go(QMainWindow):
         self.rulesWidget = QWidget()
         self.rulesWidget.setWindowTitle("rules")
         self.rulesWidget.setWindowIcon(QIcon("assets/rules-icon.png"))
-        #self.rulesWidget.setStyleSheet("background-color:"+self.draw.backgroundBoardColor)
+        self.rulesWidget.setStyleSheet("background-color:"+str(self.backgroundWindowColorhex) +"; color : "+str(self.textWindowColorhex))
 
         rulesLayout = QVBoxLayout()
+        rulesLayout.addStretch(1)
 
         # Display of the Drawing role icon
-        self.drawingHbox = QHBoxLayout()
+        qLabel1 = QLabel("1.    The board is empty at the onset of the game (unless players agree to place a handicap).")
+        qLabel2 = QLabel("2.    Black makes the first move, after which White and Black alternate.")
+        qLabel3 = QLabel("3.    A move consists of placing one stone of one's own color on an empty intersection on the board.")
+        qLabel4 = QLabel("4.    A player may pass their turn at any time.")
+        qLabel51= QLabel("5.    A stone or solidly connected group of stones of one color is captured and removed from the board when ")
+        qLabel52= QLabel("      all the intersections directly adjacent to it are occupied by the enemy. (Capture of the enemy takes precedence over self-capture.)")
+        qLabel6 = QLabel("6.    No stone may be played so as to recreate a former board position.")
+        qLabel7 = QLabel("7.    Two consecutive passes end the game.")
+        qLabel8 = QLabel("8.    A player's area consists of all the points the player has either occupied or surrounded.")
+        qLabel9 = QLabel("9.    The player with more area wins.")
+        
+        hBoxLabel1 = QHBoxLayout()
+        hBoxLabel1.addWidget(qLabel1)
+        hBoxLabel1.addStretch(1)
+        rulesLayout.addLayout(hBoxLabel1)
+        
+        hBoxLabel2 = QHBoxLayout()
+        hBoxLabel2.addWidget(qLabel2)
+        hBoxLabel2.addStretch(1)
+        rulesLayout.addLayout(hBoxLabel2)
 
-        qLabelDrawingText = QLabel()
-        qLabelDrawingText.setText("Drawing player: Draw the word +2 points")
-        self.drawingHbox.addWidget(qLabelDrawingText)
-        self.drawingHbox.addStretch(3)
-        rulesLayout.addLayout(self.drawingHbox)
+        hBoxLabel3 = QHBoxLayout()
+        hBoxLabel3.addWidget(qLabel3)
+        hBoxLabel3.addStretch(1)
+        rulesLayout.addLayout(hBoxLabel3)
 
-        #Display of the Guessing role icon
-        self.guessingHbox = QHBoxLayout()
-        qLabelGuessingText = QLabel()
-        qLabelGuessingText.setText("Guessing player: Find the word! +1 point")
-        self.guessingHbox.addWidget(qLabelGuessingText)
-        self.guessingHbox.addStretch(3)
-        rulesLayout.addLayout(self.guessingHbox)
+        hBoxLabel4 = QHBoxLayout()
+        hBoxLabel4.addWidget(qLabel4)
+        hBoxLabel4.addStretch(1)
+        rulesLayout.addLayout(hBoxLabel4)
+
+        hBoxLabel51 = QHBoxLayout()
+        hBoxLabel51.addWidget(qLabel51)
+        hBoxLabel51.addStretch(1)
+        rulesLayout.addLayout(hBoxLabel51)
+
+        hBoxLabel52 = QHBoxLayout()
+        hBoxLabel52.addWidget(qLabel52)
+        hBoxLabel52.addStretch(1)
+        rulesLayout.addLayout(hBoxLabel52)
+
+        hBoxLabel6 = QHBoxLayout()
+        hBoxLabel6.addWidget(qLabel6)
+        hBoxLabel6.addStretch(1)
+        rulesLayout.addLayout(hBoxLabel6)
+
+        hBoxLabel7 = QHBoxLayout()
+        hBoxLabel7.addWidget(qLabel7)
+        hBoxLabel7.addStretch(1)
+        rulesLayout.addLayout(hBoxLabel7)
+
+        hBoxLabel8 = QHBoxLayout()
+        hBoxLabel8.addWidget(qLabel8)
+        hBoxLabel8.addStretch(1)
+        rulesLayout.addLayout(hBoxLabel8)
+
+        hBoxLabel9 = QHBoxLayout()
+        hBoxLabel9.addWidget(qLabel9)
+        hBoxLabel9.addStretch(1)
+        rulesLayout.addLayout(hBoxLabel9)
+
+
 
         #Text part of the rules
+        rulesLink = QLabel()
+        urlLink = "<a href=\"https://en.wikipedia.org/wiki/Rules_of_Go\">Click this link to go to the wikipedia page for the rules of GO </a>"
+        rulesLink.setText(urlLink)
+        rulesLink.setOpenExternalLinks(True)
+        rulesLayout.addWidget(rulesLink)
+
+
         rulesText = QLabel()
         rulesText.setText("\t\tMay the best win")
         rulesLayout.addWidget(rulesText)
 
+        rulesLayout.addStretch(1)
         self.rulesWidget.setLayout(rulesLayout)
 
         self.rulesWidget.show()
+
+        gr = self.rulesWidget.frameGeometry()
+        screen = self.screen().availableGeometry().center()
+        gr.moveCenter(screen)
+        self.rulesWidget.move(gr.topLeft())
+        
 
 
 class Layout(QWidget):
