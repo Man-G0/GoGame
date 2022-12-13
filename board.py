@@ -34,9 +34,9 @@ class Board(QFrame):  # base the board on a QFrame widget
             squareSide = self.squareWidth()
         else:
             squareSide = self.squareHeight()
-        self.whiteStone = QPixmap("WhiteStone.png")
+        self.whiteStone = QPixmap("assets/WhiteStone.png")
         self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
-        self.blackStone = QPixmap("BlackStone.png")
+        self.blackStone = QPixmap("assets/BlackStone.png")
         self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
 
     def resizeEvent(self, event):
@@ -152,7 +152,7 @@ class Board(QFrame):  # base the board on a QFrame widget
     def endGame(self, reason):
         self.widget_EndGame = QWidget()
         self.timer.stop()
-        self.widget_EndGame.setWindowIcon(QIcon("icon.png"))
+        self.widget_EndGame.setWindowIcon(QIcon("assets/icon.png"))
         self.widget_EndGame.setMinimumSize(250, 150)
         self.widget_EndGame.setWindowTitle("Game end")
         label_end = QLabel("The game has ended !")
@@ -217,7 +217,7 @@ class Board(QFrame):  # base the board on a QFrame widget
             for row in range(0, Board.boardHeight + 1):
                 if self.listPlayable[col][row]:
                     self.brushSize = 1
-                    self.brushColor = QColor("#00E6FF")
+                    self.brushColor = self.go.playableColor
                     painter.setPen(QPen(self.brushColor, self.brushSize))
                     painter.setBrush(QBrush(self.brushColor, Qt.BrushStyle.SolidPattern))
                     colTransformation = squareSide * 0.47 + squareSide * col
@@ -241,7 +241,7 @@ class Board(QFrame):  # base the board on a QFrame widget
                 painter.save()
                 colTransformation = squareSide*0.5+squareSide* col
                 rowTransformation = squareSide*0.5+squareSide* row
-                painter.fillRect(QRect(int(colTransformation),int(rowTransformation),int(squareSide),int(squareSide)),QColor("#E0BD6B"))
+                painter.fillRect(QRect(int(colTransformation),int(rowTransformation),int(squareSide),int(squareSide)),self.go.backgroundBoardColor)
                 painter.drawRect(QRect(int(colTransformation),int(rowTransformation),int(squareSide),int(squareSide)))
                 painter.restore()
                 self.brushColor = self.go.backgroundBoardColor
