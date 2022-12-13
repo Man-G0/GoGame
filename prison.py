@@ -1,9 +1,6 @@
 from PyQt6.QtWidgets import QFrame, QLabel, QVBoxLayout, QHBoxLayout
-from PyQt6 import QtCore
-from PyQt6.QtGui import QPainter, QPixmap, QColor, QPen
-from PyQt6.QtCore import Qt, QBasicTimer, pyqtSignal, QPointF, QPoint, QRect, QSize
-
-
+from PyQt6.QtGui import QPainter, QPixmap
+from PyQt6.QtCore import QRect, QSize
 
 class Prison(QFrame):
 

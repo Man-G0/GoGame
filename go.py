@@ -40,10 +40,8 @@ class Go(QMainWindow):
     def initUI(self):
         '''initiates application UI'''
         self.board = Board(self, self.logic)
+        self.cursor()
         self.prison = Prison(self,self.board)
-
-        self.cursor_pix_white = QPixmap('assets/WhiteStone.png')
-        self.cursor_pix_black = QPixmap('assets/BlackStone.png')
 
         self.scoreBoard = ScoreBoard(self.board)
 

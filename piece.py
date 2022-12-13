@@ -6,12 +6,6 @@ class Piece(object):
         self.y = y
         self.group = 0
 
-    def getLiberties(self):  # return Liberties
-        return self.liberties
-
-    def setLiberties(self, liberties):  # set Liberties
-        self.liberties = liberties
-
     def findLiberties(self, group, xSize, ySize, piecesArray):
         self.liberties = 0
         self.group = group

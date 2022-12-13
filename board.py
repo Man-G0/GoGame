@@ -38,6 +38,11 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
         self.blackStone = QPixmap("assets/BlackStone.png")
         self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
+        self.go.cursor_scaled_pix_white = self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
+        self.go.cursor_scaled_pix_black = self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
+        self.go.cursor_white = QCursor(self.go.cursor_scaled_pix_white, -1, -1)
+        self.go.cursor_black = QCursor(self.go.cursor_scaled_pix_black, -1, -1)
+
 
     def resizeEvent(self, event):
 
@@ -51,11 +56,8 @@ class Board(QFrame):  # base the board on a QFrame widget
             squareSide = self.squareWidth()
         else:
             squareSide = self.squareHeight()
-        self.go.cursor_scaled_pix_white = self.go.cursor_pix_white.scaled(QSize(int(squareSide), int(squareSide)))
-        self.go.cursor_scaled_pix_black = self.go.cursor_pix_black.scaled(QSize(int(squareSide), int(squareSide)))
-        self.go.cursor_white = QCursor(self.go.cursor_scaled_pix_white, -1, -1)
-        self.go.cursor_black = QCursor(self.go.cursor_scaled_pix_black, -1, -1)
-        self.go.cursor()
+
+
 
 
     def squareWidth(self):
@@ -134,7 +136,7 @@ class Board(QFrame):  # base the board on a QFrame widget
                     if not self.isStarted:
                         self.start()  # start the game which will start the timer
                     self.updatePrison.emit("")
-                    if self.skipnumber>0 :
+                    if self.skipnumber > 0:
                         self.skipnumber = 0
                     self.counter=20
                     if self.logic.currentPlayer == "W":

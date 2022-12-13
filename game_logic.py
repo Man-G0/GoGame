@@ -190,9 +190,6 @@ class GameLogic:
                         self.territoriW += 1
 
     def calcPoint(self):
-        scoreB = 0
-        scoreW = 0
-
         self.calcTerritori(self)
 
         scoreB = self.territoriB
