@@ -165,11 +165,10 @@ class Board(QFrame):  # base the board on a QFrame widget
             label_deadStone = QLabel("You can now choose to remove the dead stones")
         elif reason == "BNoTime":
             label_reason.setText("Black has no time left")
+            self.endChoices()
 
         elif reason == "WNoTime":
             label_reason.setText("White has no time left")
-
-
 
         layout_end = QVBoxLayout()
         layout_end.addWidget(label_end)
@@ -194,6 +193,46 @@ class Board(QFrame):  # base the board on a QFrame widget
         button_exit = QPushButton("exit")
         # button_exit.clicked.connect(self.exit)
         layout_buttonsEnd.addWidget(button_exit)
+
+
+    def buttonRestartEvent(self):
+        self.restart = QWidget()
+        self.restart.setWindowTitle("restart")
+        self.restart.setWindowIcon(QIcon("./assets/icon.png"))
+        self.restart.setStyleSheet("background-color:" + self.go.backgroundWindowColorhex)
+
+        restartLayout = QVBoxLayout()
+
+        # Text part
+        restartText = QLabel("Do you really want to restart the game? ")
+        restartLayout.addWidget(restartText)
+
+        buttonLay = QHBoxLayout()
+
+        buttonYes = QPushButton()
+        buttonYes.setText("Yes")
+        buttonYes.clicked.connect(self.resetGame)
+        buttonLay.addWidget(buttonYes)
+
+        buttonNo = QPushButton()
+        buttonNo.setText("No")
+        buttonNo.clicked.connect(self.endRestart)
+        buttonLay.addWidget(buttonNo)
+
+        restartLayout.addLayout(buttonLay)
+
+        self.restart.setLayout(restartLayout)
+        self.restart.show()
+
+        gr = self.restart.frameGeometry()
+        screen = self.go.screen().availableGeometry().center()
+        gr.moveCenter(screen)
+        self.restart.move(gr.topLeft())
+
+
+
+    def endRestart(self):
+        self.restart.hide()
     def resetGame(self):
         '''clears pieces from the board'''
         painter = QPainter()
@@ -205,6 +244,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.go.scoreBoard.labelTerritoriB.setText("Black Territories : " + str(self.logic.territoriB))
         self.go.scoreBoard.setTimeWRemaining(self.counterW)
         self.go.scoreBoard.setTimeBRemaining(self.counterB)
+        self.restart.hide()
     def playablePosition(self,painter):
 
         if self.logic.currentPlayer == "W":

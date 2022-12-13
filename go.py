@@ -64,7 +64,7 @@ class Go(QMainWindow):
             "Ctrl+S")  # connect this save action to a keyboard shortcut, documentation: https://doc.qt.io/qt-6/qaction.html#shortcut-prop
         fileMenu.addAction(
             restartAction)  # add the save action to the file menu, documentation: https://doc.qt.io/qt-6/qwidget.html#addAction
-        restartAction.triggered.connect(self.board.resetGame)
+        restartAction.triggered.connect(self.board.buttonRestartEvent)
 
         # Help Menu
         rulesAction = QAction(QIcon("assets/rules-icon.png"), "Rules", self)
