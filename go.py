@@ -10,23 +10,24 @@ from score_board import ScoreBoard
 class Go(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.backgroundBoardColorhex = "#E0BD6B"
-        self.backgroundWindowColorhex = "#D6E0F8"
-        self.backgroundMenuColorhex = "#A3122B"
+        self.backgroundBoardColorhex = "#AF000D"
+        self.backgroundWindowColorhex = "#FFE3C6"
+        self.backgroundMenuColorhex = "#5E0603"
         self.textWindowColorhex = "#2040A9"
-        self.textMenuColorhex = "#20F039"
+        self.textMenuColorhex = "#FF8080"
         self.textPrisonColorhex = "#003333"
+        self.playableColorhex = "#D2A665"
 
         self.backgroundBoardColor = QColor(self.backgroundBoardColorhex)
         self.gridColor = Qt.GlobalColor.black
+        self.playableColor = QColor(self.playableColorhex)
         self.setStyleSheet("background-color:"+str(self.backgroundWindowColorhex) +"; color : "+str(self.textWindowColorhex))
-        self.setWindowIcon(QIcon("icon.png"))
+        self.setWindowIcon(QIcon("assets/icon.png"))
         self.initLogic()
         self.initUI()
 
-    """def resizeEvent(self, event):
-        self.resize(QSize(self.contentsRect().width(), self.board.contentsRect().height()))
-        self.scoreBoard.resize(QSize(self.scoreBoard.contentsRect().width(), self.board.contentsRect().height()))"""
+    def resizeEvent(self, event):
+        self.scoreBoard.resize(QSize(self.scoreBoard.contentsRect().width(), self.board.contentsRect().height()))
     def initLogic(self):
         self.logic = GameLogic()
 
@@ -41,8 +42,8 @@ class Go(QMainWindow):
         self.board = Board(self, self.logic)
         self.prison = Prison(self,self.board)
 
-        self.cursor_pix_white = QPixmap('WhiteStone.png')
-        self.cursor_pix_black = QPixmap('BlackStone.png')
+        self.cursor_pix_white = QPixmap('assets/WhiteStone.png')
+        self.cursor_pix_black = QPixmap('assets/BlackStone.png')
 
         self.scoreBoard = ScoreBoard(self.board)
 
@@ -68,7 +69,7 @@ class Go(QMainWindow):
         restartAction.triggered.connect(self.board.resetGame)
 
         # Help Menu
-        rulesAction = QAction(QIcon("rules-icon.png"), "Rules", self)
+        rulesAction = QAction(QIcon("assets/rules-icon.png"), "Rules", self)
         helpMenu.addAction(rulesAction)
         rulesAction.triggered.connect(self.rules)
         rulesAction.setShortcut("Ctrl+I")
@@ -106,7 +107,7 @@ class Go(QMainWindow):
     def rules(self):
         self.rulesWidget = QWidget()
         self.rulesWidget.setWindowTitle("rules")
-        self.rulesWidget.setWindowIcon(QIcon("rules-icon.png"))
+        self.rulesWidget.setWindowIcon(QIcon("assets/rules-icon.png"))
         #self.rulesWidget.setStyleSheet("background-color:"+self.draw.backgroundBoardColor)
 
         rulesLayout = QVBoxLayout()
