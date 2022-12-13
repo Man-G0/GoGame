@@ -13,7 +13,7 @@ class Board(QFrame):  # base the board on a QFrame widget
     boardWidth  = 6    # board is 6 squares wide
     boardHeight = 6     # board is 6 squares high
     timerSpeed  = 1000     # the timer updates every 1 second
-    totalTime = 30 #120
+    totalTime = 120
     counterB = totalTime    # the number the counter will count down from
     counterW = totalTime
 
@@ -199,6 +199,8 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.drawBoardSquares(painter)
         self.counterB = self.totalTime  # the number the counter will count down from
         self.counterW = self.totalTime
+        self.go.scoreBoard.labelTerritoriW.setText("White Territories : " + str(self.logic.territoriW))
+        self.go.scoreBoard.labelTerritoriB.setText("Black Territories : " + str(self.logic.territoriB))
         self.go.scoreBoard.setTimeWRemaining(self.counterW)
         self.go.scoreBoard.setTimeBRemaining(self.counterB)
     def playablePosition(self,painter):
