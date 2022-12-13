@@ -196,7 +196,6 @@ class Go(QMainWindow):
         screen = self.screen().availableGeometry().center()
         gr.moveCenter(screen)
         self.rulesWidget.move(gr.topLeft())
-        
 
 
 class Layout(QWidget):
