@@ -18,6 +18,7 @@ class Board(QFrame):  # base the board on a QFrame widget
     totalTime = 120
     counterB = totalTime    # the number the counter will count down from
     counterW = totalTime
+    cursorCoef = 0.9
 
     def __init__(self, parent, logic):
         super().__init__(parent)
@@ -37,12 +38,13 @@ class Board(QFrame):  # base the board on a QFrame widget
             squareSide = self.squareWidth()
         else:
             squareSide = self.squareHeight()
+        self.oldSquareSide = squareSide
         self.whiteStone = QPixmap("assets/WhiteStone.png")
         self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
         self.blackStone = QPixmap("assets/BlackStone.png")
         self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
-        self.go.cursor_scaled_pix_white = self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
-        self.go.cursor_scaled_pix_black = self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
+        self.go.cursor_scaled_pix_white = self.whiteStone.scaled(QSize(int(squareSide * self.cursorCoef), int(squareSide * self.cursorCoef)))
+        self.go.cursor_scaled_pix_black = self.blackStone.scaled(QSize(int(squareSide * self.cursorCoef), int(squareSide * self.cursorCoef)))
         self.go.cursor_white = QCursor(self.go.cursor_scaled_pix_white, -1, -1)
         self.go.cursor_black = QCursor(self.go.cursor_scaled_pix_black, -1, -1)
 
@@ -59,7 +61,13 @@ class Board(QFrame):  # base the board on a QFrame widget
             squareSide = self.squareWidth()
         else:
             squareSide = self.squareHeight()
-
+        if self.oldSquareSide != squareSide:
+            self.oldSquareSide = squareSide
+            self.go.cursor_scaled_pix_white = self.whiteStone.scaled(QSize(int(squareSide * self.cursorCoef), int(squareSide * self.cursorCoef)))
+            self.go.cursor_scaled_pix_black = self.blackStone.scaled(QSize(int(squareSide * self.cursorCoef), int(squareSide * self.cursorCoef)))
+            self.go.cursor_white = QCursor(self.go.cursor_scaled_pix_white, -1, -1)
+            self.go.cursor_black = QCursor(self.go.cursor_scaled_pix_black, -1, -1)
+            self.go.cursor()
 
 
 
