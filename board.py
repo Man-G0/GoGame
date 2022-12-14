@@ -82,6 +82,7 @@ class Board(QFrame):  # base the board on a QFrame widget
     def start(self):
         '''starts game'''
         self.isStarted = True                       # set the boolean which determines if the game has started to TRUE
+        self.playGame = False
         self.resetGame()                            # reset the game
         self.timer.start(self.timerSpeed, self)     # start the timer with the correct speed
         print("start () - timer is started")
@@ -144,23 +145,27 @@ class Board(QFrame):  # base the board on a QFrame widget
                 rowTransformation = squareSide * 0.5 + squareSide * row
 
                 if (posX+squareSide * 0.3>colTransformation)&(posX-squareSide * 0.3<colTransformation)&(posY+squareSide * 0.3>rowTransformation)&(posY-squareSide * 0.3<rowTransformation)&(self.listPlayable[col][row]):
-                    if not self.isStarted:
-                        self.start()  # start the game which will start the timer
-                    self.updatePrison.emit("")
-                    if self.skipnumber > 0:
-                        self.skipnumber = 0
-                    self.counter=20
-                    if self.logic.currentPlayer == "W":
-                        self.logic.addPiece('W',col,row)
-                        self.logic.currentPlayer = "B"
-                    elif self.logic.currentPlayer == "B":
-                        self.logic.addPiece('B',col,row)
-                        self.logic.currentPlayer = "W"
-                    print("jusqu'ici tout va bien")
-                    self.go.cursor()
-                    self.logic.calcTerritori()
-                    self.go.scoreBoard.labelTerritoriW.setText("White Territories : " + str(self.logic.territoriW))
-                    self.go.scoreBoard.labelTerritoriB.setText("Black Territories : " + str(self.logic.territoriB))
+                    if not self.isStarted & self.playGame :
+                        print("hello")
+                        self.go.logic.removeDead(col,row)
+                    else:
+                        if not self.isStarted & (not self.playGame) :
+                            self.start()  # start the game which will start the timer
+                            self.playGame = True
+                        self.updatePrison.emit("")
+                        if self.skipnumber > 0:
+                            self.skipnumber = 0
+                        self.counter=20
+                        if self.logic.currentPlayer == "W":
+                            self.logic.addPiece('W',col,row)
+                            self.logic.currentPlayer = "B"
+                        elif self.logic.currentPlayer == "B":
+                            self.logic.addPiece('B',col,row)
+                            self.logic.currentPlayer = "W"
+                        self.go.cursor()
+                        self.logic.calcTerritori()
+                        self.go.scoreBoard.labelTerritoriW.setText("White Territories : " + str(self.logic.territoriW))
+                        self.go.scoreBoard.labelTerritoriB.setText("Black Territories : " + str(self.logic.territoriB))
         self.clickLocationSignal.emit(self.logic.currentPlayer)
 
     def endGame(self, reason):
@@ -219,6 +224,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         sys.exit(self.go.app.exec())
     def deadStoneEvent(self):
         self.widget_EndGame.hide()
+
     def buttonRestartEvent(self):
 
         self.restart.setWindowTitle("restart")
