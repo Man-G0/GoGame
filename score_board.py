@@ -23,7 +23,6 @@ class ScoreBoard(QWidget):
         #create two labels which will be updated by signals
         self.label_playerTurn = QLabel("Turn to player Black")
         self.button_skipTurn = QPushButton("Skip turn")
-
         widgetB = QWidget()
         self.button_skipTurn.clicked.connect(self.board.skipTurn)
         self.label_timeB = QLabel("Time left for black : ")

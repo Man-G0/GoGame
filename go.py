@@ -198,6 +198,9 @@ class Go(QMainWindow):
         gr.moveCenter(screen)
         self.rulesWidget.move(gr.topLeft())
 
+    def deadStonesEnd(self):
+        self.scoreBoard.button_skipTurn.setText("calculate scores")
+        self.scoreBoard.button_skipTurn.cliqued.connect(self.rules)
 
 class Layout(QWidget):
     def __init__(self, board, scoreBoard, prison):
