@@ -283,10 +283,15 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.drawBoardSquares(painter)
         self.counterB = self.totalTime  # the number the counter will count down from
         self.counterW = self.totalTime
+        self.isStarted = False      # game is not currently started
+        self.playGame = False
+        self.skipnumber = 0
         self.go.scoreBoard.labelTerritoriW.setText("White Territories : " + str(self.logic.territoriW))
         self.go.scoreBoard.labelTerritoriB.setText("Black Territories : " + str(self.logic.territoriB))
         self.go.scoreBoard.setTimeWRemaining(self.counterW)
         self.go.scoreBoard.setTimeBRemaining(self.counterB)
+        self.go.scoreBoard.button_skipTurn.setText("Skip turn")
+        self.go.scoreBoard.button_skipTurn.setStyleSheet("background-color:" + self.go.backgroundWindowColorhex)
 
     def playablePosition(self,painter):
 
