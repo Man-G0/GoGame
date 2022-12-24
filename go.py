@@ -200,7 +200,7 @@ class Go(QMainWindow):
 
     def deadStonesEnd(self):
         self.scoreBoard.button_skipTurn.setText("calculate scores")
-        self.scoreBoard.button_skipTurn.cliqued.connect(self.rules)
+        self.scoreBoard.button_skipTurn.setStyleSheet("background-color:"+self.playableColorhex)
 
 class Layout(QWidget):
     def __init__(self, board, scoreBoard, prison):
