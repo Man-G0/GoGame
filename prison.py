@@ -10,12 +10,7 @@ class Prison(QFrame):
         self.go = parent
         self.board = board
 
-        self.whiteStone = QPixmap("assets/" + self.go.whiteStoneFile)
-        self.size = int(self.contentsRect().width() / 4)
-        self.whiteStone.scaled(QSize(self.size, self.size))
-        self.blackStone = QPixmap("assets/" + self.go.blackStoneFile)
-        self.blackStone.scaled(QSize(self.size, self.size))
-        self.board.updatePrison.connect(self.paintEvent)
+        self.initStone()
 
         self.blackList = self.board.logic.bCaptured
         self.whiteList = self.board.logic.wCaptured
@@ -34,6 +29,15 @@ class Prison(QFrame):
         self.scoreLayout.addStretch(1)
         self.prisonLayout.addLayout(self.scoreLayout)
         self.setLayout(self.prisonLayout)
+
+    def initStone(self):
+        self.whiteStone = QPixmap("assets/" + self.go.whiteStoneFile)
+        self.size = int(self.contentsRect().width() / 4)
+        self.whiteStone.scaled(QSize(self.size, self.size))
+        self.blackStone = QPixmap("assets/" + self.go.blackStoneFile)
+        self.blackStone.scaled(QSize(self.size, self.size))
+        self.board.updatePrison.connect(self.paintEvent)
+
 
     def resizeEvent(self, event):
         # Create a square base size of 10x10 and scale it to the new size

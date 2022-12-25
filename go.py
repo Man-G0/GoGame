@@ -5,6 +5,7 @@ from board import Board
 from prison import Prison
 from game_logic import GameLogic
 from score_board import ScoreBoard
+from theme import Theme
 
 
 class Go(QMainWindow):
@@ -12,15 +13,31 @@ class Go(QMainWindow):
         super().__init__()
         self.app = app
         self.getListTheme()
-        self.getColorHex(self.listTheme[0][0])
+
+        self.board = None
+        self.prison = None
+        self.mainMenu = self.menuBar()  # create a menu bar now because we need it to be created wen we applied theme
+        self.changeTheme(self.listTheme[0].file)
+
+        self.setWindowIcon(QIcon("assets/icon.png"))
+        self.initLogic()
+        self.initUI()
+
+
+    def changeTheme(self, file):
+        self.getColorHex(file)
 
         self.backgroundBoardColor = QColor(self.backgroundBoardColorhex)
         self.gridColor = Qt.GlobalColor.black
         self.playableColor = QColor(self.playableColorhex)
-        self.setStyleSheet("background-color:"+str(self.backgroundWindowColorhex) +"; color : "+str(self.textWindowColorhex))
-        self.setWindowIcon(QIcon("assets/icon.png"))
-        self.initLogic()
-        self.initUI()
+        self.setStyleSheet("background-color:" + str(self.backgroundWindowColorhex) + "; color : " + str(self.textWindowColorhex))
+        self.mainMenu.setStyleSheet("background-color:" + str(self.backgroundMenuColorhex) + "; color:" + str(self.textMenuColorhex))
+        if self.board is not None:
+            self.board.initCursor()
+            self.cursor()
+
+        if self.prison is not None:
+            self.prison.initStone()
 
     def resizeEvent(self, event):
         self.scoreBoard.resize(QSize(self.scoreBoard.contentsRect().width(), self.board.contentsRect().height()))
@@ -48,11 +65,11 @@ class Go(QMainWindow):
         self.setCentralWidget(self.mainLayout)
 
         # set up menus
-        mainMenu = self.menuBar()  # create a menu bar
-        mainMenu.setStyleSheet("background-color:" + str(self.backgroundMenuColorhex) + "; color:" + str(self.textMenuColorhex))
-        mainMenu.setNativeMenuBar(False)
-        fileMenu = mainMenu.addMenu(" File")  # add the file menu to the menu bar
-        helpMenu = mainMenu.addMenu(" Help")  # add the "Help" menu to the menu bar
+
+        self.mainMenu.setNativeMenuBar(False)
+        fileMenu = self.mainMenu.addMenu(" File")  # add the file menu to the menu bar
+        helpMenu = self.mainMenu.addMenu(" Help")  # add the "Help" menu to the menu bar
+        themeMenu = self.mainMenu.addMenu(" Theme")
 
         # save menu item
         restartAction = QAction(QIcon("./icons/save.png"), "Restart",self)
@@ -67,6 +84,10 @@ class Go(QMainWindow):
         helpMenu.addAction(rulesAction)
         rulesAction.triggered.connect(self.rules)
         rulesAction.setShortcut("Ctrl+I")
+
+        for theme in self.listTheme:
+            themeMenu.addAction(theme.themeAction)
+
 
         """contactAction = QAction(QIcon("./icons/support-icon.png"), "Contact us", self)
         contactAction.setShortcut("Ctrl+*")
@@ -199,7 +220,7 @@ class Go(QMainWindow):
 
     def getColorHex(self, txtName):
         try :
-            colortxt = open("assets/" + txtName + ".txt", "r")
+            colortxt = open("assets/" + txtName, "r")
 
             for ligne in colortxt:
                 ligne = ligne.strip('\n').split(' = ')
@@ -226,7 +247,7 @@ class Go(QMainWindow):
             colortxt.close()
 
         except:
-            print('error with ' + txtName + ".txt")
+            print('error with ' + txtName)
             self.backgroundBoardColorhex =  '#AF000D'
             self.backgroundWindowColorhex =  '#FFE3C6'
             self.backgroundMenuColorhex =  '#5E0603'
@@ -237,7 +258,6 @@ class Go(QMainWindow):
             self.whiteStoneFile = 'WhiteStone.png'
             self.blackStoneFile = 'BlackStone.png'
 
-
     def getListTheme(self):
         try :
             themetxt = open("assets/listTheme.txt", "r")
@@ -245,12 +265,12 @@ class Go(QMainWindow):
 
             for ligne in themetxt:
                 ligne = ligne.strip('\n').split(' => ')
-                self.listTheme.append(ligne)
+                self.listTheme.append(Theme(ligne[0], ligne[1], self))
 
-            print(self.listTheme)
+            themetxt.close()
         except:
             print('error with listTheme.txt')
-            self.listTheme = [['color1.txt', 'theme1']]
+            self.listTheme = [Theme('color1.txt', 'theme1', self)]
 
 
 class Layout(QWidget):

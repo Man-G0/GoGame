@@ -38,16 +38,19 @@ class Board(QFrame):  # base the board on a QFrame widget
 
 
         if self.squareWidth() <= self.squareHeight():
-            squareSide = self.squareWidth()
+            self.squareSide = self.squareWidth()
         else:
-            squareSide = self.squareHeight()
-        self.oldSquareSide = squareSide
+            self.squareSide = self.squareHeight()
+        self.oldSquareSide = self.squareSide
+        self.initCursor()
+
+    def initCursor(self):
         self.whiteStone = QPixmap("assets/" + self.go.whiteStoneFile)
-        self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
+        self.whiteStone.scaled(QSize(int(self.squareSide), int(self.squareSide)))
         self.blackStone = QPixmap("assets/" + self.go.blackStoneFile)
-        self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
-        self.go.cursor_scaled_pix_white = self.whiteStone.scaled(QSize(int(squareSide * self.cursorCoef), int(squareSide * self.cursorCoef)))
-        self.go.cursor_scaled_pix_black = self.blackStone.scaled(QSize(int(squareSide * self.cursorCoef), int(squareSide * self.cursorCoef)))
+        self.blackStone.scaled(QSize(int(self.squareSide), int(self.squareSide)))
+        self.go.cursor_scaled_pix_white = self.whiteStone.scaled(QSize(int(self.squareSide * self.cursorCoef), int(self.squareSide * self.cursorCoef)))
+        self.go.cursor_scaled_pix_black = self.blackStone.scaled(QSize(int(self.squareSide * self.cursorCoef), int(self.squareSide * self.cursorCoef)))
         self.go.cursor_white = QCursor(self.go.cursor_scaled_pix_white, -1, -1)
         self.go.cursor_black = QCursor(self.go.cursor_scaled_pix_black, -1, -1)
 
@@ -61,13 +64,13 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.resize(new_size)
         self.go.scoreBoard.resize(QSize(self.go.scoreBoard.contentsRect().width(), self.contentsRect().height()))
         if self.squareWidth()<=self.squareHeight():
-            squareSide = self.squareWidth()
+            self.squareSide = self.squareWidth()
         else:
-            squareSide = self.squareHeight()
-        if self.oldSquareSide != squareSide:
-            self.oldSquareSide = squareSide
-            self.go.cursor_scaled_pix_white = self.whiteStone.scaled(QSize(int(squareSide * self.cursorCoef), int(squareSide * self.cursorCoef)))
-            self.go.cursor_scaled_pix_black = self.blackStone.scaled(QSize(int(squareSide * self.cursorCoef), int(squareSide * self.cursorCoef)))
+            self.squareSide = self.squareHeight()
+        if self.oldSquareSide != self.squareSide:
+            self.oldSquareSide = self.squareSide
+            self.go.cursor_scaled_pix_white = self.whiteStone.scaled(QSize(int(self.squareSide * self.cursorCoef), int(self.squareSide * self.cursorCoef)))
+            self.go.cursor_scaled_pix_black = self.blackStone.scaled(QSize(int(self.squareSide * self.cursorCoef), int(self.squareSide * self.cursorCoef)))
             self.go.cursor_white = QCursor(self.go.cursor_scaled_pix_white, -1, -1)
             self.go.cursor_black = QCursor(self.go.cursor_scaled_pix_black, -1, -1)
             self.go.cursor()
@@ -136,19 +139,19 @@ class Board(QFrame):  # base the board on a QFrame widget
         posX = event.position().x()
         posY = event.position().y()
         if self.squareWidth() <= self.squareHeight():
-            squareSide = self.squareWidth()
+            self.squareSide = self.squareWidth()
         else:
-            squareSide = self.squareHeight()
+            self.squareSide = self.squareHeight()
         if self.logic.currentPlayer == "W":
             self.listPlayable = self.logic.findWPlayable()
         elif self.logic.currentPlayer == "B":
             self.listPlayable = self.logic.findBPlayable()
         for col in range(0, Board.boardWidth+1):
             for row in range(0, Board.boardHeight+1):
-                colTransformation = squareSide * 0.5 + squareSide * col
-                rowTransformation = squareSide * 0.5 + squareSide * row
+                colTransformation = self.squareSide * 0.5 + self.squareSide * col
+                rowTransformation = self.squareSide * 0.5 + self.squareSide * row
 
-                if (posX+squareSide * 0.3>colTransformation)&(posX-squareSide * 0.3<colTransformation)&(posY+squareSide * 0.3>rowTransformation)&(posY-squareSide * 0.3<rowTransformation):
+                if (posX+self.squareSide * 0.3>colTransformation)&(posX-self.squareSide * 0.3<colTransformation)&(posY+self.squareSide * 0.3>rowTransformation)&(posY-self.squareSide * 0.3<rowTransformation):
                     if not self.isStarted and self.playGame:
                         self.go.logic.removeDead(col,row)
                         self.go.cursor()
@@ -300,9 +303,9 @@ class Board(QFrame):  # base the board on a QFrame widget
             self.listPlayable = self.logic.findBPlayable()
 
         if self.squareWidth()<=self.squareHeight():
-            squareSide = self.squareWidth()
+            self.squareSide = self.squareWidth()
         else:
-            squareSide = self.squareHeight()
+            self.squareSide = self.squareHeight()
 
         for col in range(0, Board.boardWidth + 1):
             for row in range(0, Board.boardHeight + 1):
@@ -311,8 +314,8 @@ class Board(QFrame):  # base the board on a QFrame widget
                     self.brushColor = self.go.playableColor
                     painter.setPen(QPen(self.brushColor, self.brushSize))
                     painter.setBrush(QBrush(self.brushColor, Qt.BrushStyle.SolidPattern))
-                    colTransformation = squareSide * 0.47 + squareSide * col
-                    rowTransformation = squareSide * 0.47 + squareSide * row
+                    colTransformation = self.squareSide * 0.47 + self.squareSide * col
+                    rowTransformation = self.squareSide * 0.47 + self.squareSide * row
                     painter.drawEllipse(int(colTransformation), int(rowTransformation), 5,5)
 
 
@@ -324,16 +327,16 @@ class Board(QFrame):  # base the board on a QFrame widget
         painter.fillRect(QRect(0, 0, self.contentsRect().width(), self.contentsRect().height()),self.go.backgroundBoardColor)
 
         if self.squareWidth()<=self.squareHeight():
-            squareSide = self.squareWidth()
+            self.squareSide = self.squareWidth()
         else:
-            squareSide = self.squareHeight()
+            self.squareSide = self.squareHeight()
         for row in range(0, Board.boardHeight):
             for col in range (0, Board.boardWidth):
                 painter.save()
-                colTransformation = squareSide*0.5+squareSide* col
-                rowTransformation = squareSide*0.5+squareSide* row
-                painter.fillRect(QRect(int(colTransformation),int(rowTransformation),int(squareSide),int(squareSide)),self.go.backgroundBoardColor)
-                painter.drawRect(QRect(int(colTransformation),int(rowTransformation),int(squareSide),int(squareSide)))
+                colTransformation = self.squareSide*0.5+self.squareSide* col
+                rowTransformation = self.squareSide*0.5+self.squareSide* row
+                painter.fillRect(QRect(int(colTransformation),int(rowTransformation),int(self.squareSide),int(self.squareSide)),self.go.backgroundBoardColor)
+                painter.drawRect(QRect(int(colTransformation),int(rowTransformation),int(self.squareSide),int(self.squareSide)))
                 painter.restore()
                 self.brushColor = self.go.backgroundBoardColor
 
@@ -343,23 +346,23 @@ class Board(QFrame):  # base the board on a QFrame widget
         '''draw the prices on the board'''
 
         if self.squareWidth()<=self.squareHeight():
-            squareSide = self.squareWidth()
+            self.squareSide = self.squareWidth()
         else:
-            squareSide = self.squareHeight()
+            self.squareSide = self.squareHeight()
         image = QRect(0, 0, 70, 70)
         for row in range(0, Board.boardHeight+1):
             for col in range(0, Board.boardWidth+1):
                 painter.save()
-                colTransformation = squareSide * col
-                rowTransformation = squareSide * row
+                colTransformation = self.squareSide * col
+                rowTransformation = self.squareSide * row
                 if self.logic.piecesArray[col][row] is not None:
                     if self.logic.piecesArray[col][row].color == 'W':
-                        piece = QRect(int(colTransformation),int(rowTransformation),int(squareSide), int(squareSide))
-                        self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
+                        piece = QRect(int(colTransformation),int(rowTransformation),int(self.squareSide), int(self.squareSide))
+                        self.whiteStone.scaled(QSize(int(self.squareSide), int(self.squareSide)))
                         painter.drawPixmap(piece, self.whiteStone, image)
                     elif self.logic.piecesArray[col][row].color == 'B':
-                        piece = QRect(int(colTransformation),int(rowTransformation), int(squareSide), int(squareSide))
-                        self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
+                        piece = QRect(int(colTransformation),int(rowTransformation), int(self.squareSide), int(self.squareSide))
+                        self.blackStone.scaled(QSize(int(self.squareSide), int(self.squareSide)))
                         painter.drawPixmap(piece, self.blackStone, image)
                 painter.restore()
 
