@@ -1,0 +1,2 @@
+color1.txt => theme1
+color2.txt => theme2

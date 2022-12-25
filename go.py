@@ -8,16 +8,11 @@ from score_board import ScoreBoard
 
 
 class Go(QMainWindow):
-    def __init__(self,app):
+    def __init__(self, app):
         super().__init__()
         self.app = app
-        self.backgroundBoardColorhex = "#AF000D"
-        self.backgroundWindowColorhex = "#FFE3C6"
-        self.backgroundMenuColorhex = "#5E0603"
-        self.textWindowColorhex = "#2040A9"
-        self.textMenuColorhex = "#FF8080"
-        self.textPrisonColorhex = "#003333"
-        self.playableColorhex = "#D2A665"
+        self.getListTheme()
+        self.getColorHex(self.listTheme[0][0])
 
         self.backgroundBoardColor = QColor(self.backgroundBoardColorhex)
         self.gridColor = Qt.GlobalColor.black
@@ -201,6 +196,62 @@ class Go(QMainWindow):
     def deadStonesEnd(self):
         self.scoreBoard.button_skipTurn.setText("calculate scores")
         self.scoreBoard.button_skipTurn.setStyleSheet("background-color:"+self.playableColorhex)
+
+    def getColorHex(self, txtName):
+        try :
+            colortxt = open("assets/" + txtName + ".txt", "r")
+
+            for ligne in colortxt:
+                ligne = ligne.strip('\n').split(' = ')
+                match ligne[0]:
+                    case "backgroundBoardColor":
+                        self.backgroundBoardColorhex = ligne[1]
+                    case "backgroundWindowColor":
+                        self.backgroundWindowColorhex = ligne[1]
+                    case "backgroundMenuColor":
+                        self.backgroundMenuColorhex = ligne[1]
+                    case "textWindowColor":
+                        self.textWindowColorhex = ligne[1]
+                    case "textMenuColor":
+                        self.textMenuColorhex = ligne[1]
+                    case "textPrisonColor":
+                        self.textPrisonColorhex = ligne[1]
+                    case "playableColor":
+                        self.playableColorhex = ligne[1]
+                    case "whiteStoneFile":
+                        self.whiteStoneFile = ligne[1]
+                    case "blackStoneFile":
+                        self.blackStoneFile = ligne[1]
+
+            colortxt.close()
+
+        except:
+            print('error with ' + txtName + ".txt")
+            self.backgroundBoardColorhex =  '#AF000D'
+            self.backgroundWindowColorhex =  '#FFE3C6'
+            self.backgroundMenuColorhex =  '#5E0603'
+            self.textWindowColorhex =  '#2040A9'
+            self.textMenuColorhex =  '#FF8080'
+            self.textPrisonColorhex =  '#003333'
+            self.playableColorhex =  '#D2A665'
+            self.whiteStoneFile = 'WhiteStone.png'
+            self.blackStoneFile = 'BlackStone.png'
+
+
+    def getListTheme(self):
+        try :
+            themetxt = open("assets/listTheme.txt", "r")
+            self.listTheme = []
+
+            for ligne in themetxt:
+                ligne = ligne.strip('\n').split(' => ')
+                self.listTheme.append(ligne)
+
+            print(self.listTheme)
+        except:
+            print('error with listTheme.txt')
+            self.listTheme = [['color1.txt', 'theme1']]
+
 
 class Layout(QWidget):
     def __init__(self, board, scoreBoard, prison):

@@ -42,9 +42,9 @@ class Board(QFrame):  # base the board on a QFrame widget
         else:
             squareSide = self.squareHeight()
         self.oldSquareSide = squareSide
-        self.whiteStone = QPixmap("assets/WhiteStone.png")
+        self.whiteStone = QPixmap("assets/" + self.go.whiteStoneFile)
         self.whiteStone.scaled(QSize(int(squareSide), int(squareSide)))
-        self.blackStone = QPixmap("assets/BlackStone.png")
+        self.blackStone = QPixmap("assets/" + self.go.blackStoneFile)
         self.blackStone.scaled(QSize(int(squareSide), int(squareSide)))
         self.go.cursor_scaled_pix_white = self.whiteStone.scaled(QSize(int(squareSide * self.cursorCoef), int(squareSide * self.cursorCoef)))
         self.go.cursor_scaled_pix_black = self.blackStone.scaled(QSize(int(squareSide * self.cursorCoef), int(squareSide * self.cursorCoef)))

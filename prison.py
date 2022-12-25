@@ -10,10 +10,10 @@ class Prison(QFrame):
         self.go = parent
         self.board = board
 
-        self.whiteStone = QPixmap("assets/WhiteStone.png")
+        self.whiteStone = QPixmap("assets/" + self.go.whiteStoneFile)
         self.size = int(self.contentsRect().width() / 4)
         self.whiteStone.scaled(QSize(self.size, self.size))
-        self.blackStone = QPixmap("assets/BlackStone.png")
+        self.blackStone = QPixmap("assets/" + self.go.blackStoneFile)
         self.blackStone.scaled(QSize(self.size, self.size))
         self.board.updatePrison.connect(self.paintEvent)
 
