@@ -119,9 +119,10 @@ class Board(QFrame):  # base the board on a QFrame widget
             if self.skipnumber < 2:
                 if self.logic.currentPlayer == "W":
                     self.logic.currentPlayer = "B"
-                    # self.logic.bCaptured.append(Piece("W", -1, -1))
+                    self.logic.bCaptured.append(Piece("W", None, None))
                 elif self.logic.currentPlayer == "B":
                     self.logic.currentPlayer = "W"
+                    self.logic.wCaptured.append(Piece("B", None, None))
                 self.go.cursor()
                 self.clickLocationSignal.emit(self.logic.currentPlayer)
             else:
