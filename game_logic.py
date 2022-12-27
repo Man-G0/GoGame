@@ -192,13 +192,13 @@ class GameLogic:
     def calcPoint(self):
         self.calcTerritori(self)
 
-        scoreB = self.territoriB
-        scoreW = self.territoriW
+        self.scoreB = self.territoriB
+        self.scoreW = self.territoriW
 
-        scoreB -= len(self.bCaptured) + 6.5
-        scoreW -= len(self.wCaptured)
-        print("scoreB = " + str(scoreB))
-        print("scoreW = " + str(scoreW))
+        self.scoreB -= len(self.bCaptured) + 6.5
+        self.scoreW -= len(self.wCaptured)
+        print("scoreB = " + str(self.scoreB))
+        print("scoreW = " + str(self.scoreW))
 
     def removeDead(self, x, y):
         pieceCheck = self.piecesArray[x][y]

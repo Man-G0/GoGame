@@ -67,17 +67,20 @@ class Go(QMainWindow):
         # set up menus
 
         self.mainMenu.setNativeMenuBar(False)
-        fileMenu = self.mainMenu.addMenu(" File")  # add the file menu to the menu bar
+        gameMenu = self.mainMenu.addMenu(" Game")  # add the file menu to the menu bar
         helpMenu = self.mainMenu.addMenu(" Help")  # add the "Help" menu to the menu bar
         themeMenu = self.mainMenu.addMenu(" Theme")
 
-        # save menu item
-        restartAction = QAction(QIcon("./icons/save.png"), "Restart",self)
-        restartAction.setShortcut(
-            "Ctrl+S")  # connect this save action to a keyboard shortcut, documentation: https://doc.qt.io/qt-6/qaction.html#shortcut-prop
-        fileMenu.addAction(
-            restartAction)  # add the save action to the file menu, documentation: https://doc.qt.io/qt-6/qwidget.html#addAction
+        # game menu item
+        restartAction = QAction("Restart",self)
+        restartAction.setShortcut("Ctrl+R")
+        gameMenu.addAction(restartAction)
         restartAction.triggered.connect(self.board.buttonRestartEvent)
+
+        exitAction = QAction("Exit", self)
+        restartAction.setShortcut("Ctrl+E")
+        gameMenu.addAction(exitAction)
+        exitAction.triggered.connect(self.board.buttonExitEvent)
 
         # Help Menu
         rulesAction = QAction(QIcon("assets/rules-icon.png"), "Rules", self)

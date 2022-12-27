@@ -21,7 +21,7 @@ class ScoreBoard(QWidget):
         #create two labels which will be updated by signals
         self.label_playerTurn = QLabel("Turn to player Black")
         self.button_skipTurn = QPushButton("Skip turn")
-        widgetB = QWidget()
+        self.widgetB = QWidget()
         self.button_skipTurn.clicked.connect(self.board.skipTurn)
         self.label_timeB = QLabel("Time left for black : ")
         self.label_timeBRemaining = QLabel(str(int(self.board.counterB / 60))+" min "+str(self.board.counterB % 60)+" sec")
@@ -36,11 +36,11 @@ class ScoreBoard(QWidget):
         layoutB.addWidget(self.label_timeBRemaining)
         layoutB.addWidget(self.pbarBRemaining)
         layoutB.addWidget(self.labelTerritoriB)
-        widgetB.setLayout(layoutB)
-        widgetB.setStyleSheet("background-color: black ;color : white ;border-radius: 15px")
+        self.widgetB.setLayout(layoutB)
+        self.widgetB.setStyleSheet("background-color: black ;color : white ;border-radius: 15px")
 
 
-        widgetW = QWidget()
+        self.widgetW = QWidget()
         self.label_timeW = QLabel("Time left for white : ")
         self.label_timeWRemaining = QLabel(str(int(self.board.counterW / 60))+" min "+str(self.board.counterW % 60)+" sec")
         self.pbarWRemaining = QProgressBar(self,  textVisible=False)
@@ -51,14 +51,14 @@ class ScoreBoard(QWidget):
         layoutW.addWidget(self.label_timeWRemaining)
         layoutW.addWidget(self.pbarWRemaining)
         layoutW.addWidget(self.labelTerritoriW)
-        widgetW.setLayout(layoutW)
-        widgetW.setStyleSheet("background-color: white ;color : black; border-radius: 15px")
+        self.widgetW.setLayout(layoutW)
+        self.widgetW.setStyleSheet("background-color: white ;color : black; border-radius: 15px")
 
         self.mainLayout.addWidget(self.label_playerTurn)
         self.mainLayout.addStretch(1)
-        self.mainLayout.addWidget(widgetB)
+        self.mainLayout.addWidget(self.widgetB)
         self.mainLayout.addStretch(1)
-        self.mainLayout.addWidget(widgetW)
+        self.mainLayout.addWidget(self.widgetW)
         self.mainLayout.addStretch(6)
         self.mainLayout.addWidget(self.button_skipTurn)
         self.make_connection(board)
@@ -67,7 +67,6 @@ class ScoreBoard(QWidget):
 
     def center(self):
         '''centers the window on the screen, you do not need to implement this method'''
-        #self.go.center()
 
     def make_connection(self, board):
         '''this handles a signal sent from the board class'''

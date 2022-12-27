@@ -31,12 +31,13 @@ class Board(QFrame):  # base the board on a QFrame widget
     def initBoard(self):
         '''initiates board'''
         self.timer = QBasicTimer()  # create a timer for the game
-        self.isStarted = False      # game is not currently started
-        self.playGame = False
+        self.isStarted = False      # true if the players are currently playing, false if the game hasn't started yet, or after a double skip/endgame
+        self.playGame = False       # true if isStarted was set to true at a point
+        self.finished = False       # is set to true if all actions of the game, including the deadstones part were done
         self.setMinimumSize(500, 500)
         self.skipnumber = 0
         self.restart = QWidget()
-
+        self.exit = QWidget()
 
 
         if self.squareWidth() <= self.squareHeight():
@@ -112,23 +113,24 @@ class Board(QFrame):  # base the board on a QFrame widget
             super(Board, self).timerEvent(event)      # if we do not handle an event we should pass it to the super
                                                         # class for handling
     def skipTurn(self):
-        if not self.isStarted and self.playGame:
-            self.endGame("deadStones were retired")
-            print("hiiiii")
+        if self.finished:
+            pass
         else:
-            self.skipnumber += 1
-            self.counter = 20
-            if self.skipnumber < 2:
-                if self.logic.currentPlayer == "W":
-                    self.logic.currentPlayer = "B"
-                    self.logic.bCaptured.append(Piece("W", None, None))
-                elif self.logic.currentPlayer == "B":
-                    self.logic.currentPlayer = "W"
-                    self.logic.wCaptured.append(Piece("B", None, None))
-                self.go.cursor()
-                self.clickLocationSignal.emit(self.logic.currentPlayer)
+            if not self.isStarted and self.playGame:
+                self.endGame("deadStones were retired")
             else:
-                self.endGame("2 skips")
+                self.skipnumber += 1
+                self.counter = 20
+                if self.skipnumber < 2:
+                    if self.logic.currentPlayer == "W":
+                        self.logic.currentPlayer = "B"
+                    elif self.logic.currentPlayer == "B":
+                        self.logic.currentPlayer = "W"
+                    self.go.cursor()
+                    self.clickLocationSignal.emit(self.logic.currentPlayer)
+                else:
+                    self.endGame("2 skips")
+
 
     def paintEvent(self, event):
         '''paints the board and the pieces of the game'''
@@ -183,9 +185,13 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def endGame(self, reason):
         self.timer.stop()
+
         self.widgetEndGame = QWidget()
         self.widgetEndGame.setWindowIcon(QIcon("assets/icon.png"))
+        self.widgetEndGame.setStyleSheet("background-color:" + str(self.go.backgroundWindowColorhex) + "; color : " + str(
+            self.go.textWindowColorhex))
         self.widgetEndGame.setMinimumSize(250, 150)
+        self.logic.calcPoint()
         self.widgetEndGame.setWindowTitle("Game end")
         labelEnd = QLabel("The game has ended !")
         labelReason = QLabel()
@@ -201,32 +207,65 @@ class Board(QFrame):  # base the board on a QFrame widget
 
         buttonExit = QPushButton("Exit")
         buttonExit.clicked.connect(self.exitEvent)
+        labelDeadStones = QLabel("You can now choose to remove the dead stones")
         layoutButtonsEnd.addWidget(buttonExit)
         self.playGame = True
         self.isStarted = False
         if reason == "2 skips":
             labelReason.setText("Both players skipped their turn")
-            labelDeadStones = QLabel("You can now choose to remove the dead stones")
             layoutButtonsEnd.addWidget(buttonDeadStones)
         elif reason == "BNoTime":
             labelReason.setText("Black has no time left")
+            self.finished = True
         elif reason == "WNoTime":
             labelReason.setText("White has no time left")
+            self.finished = True
         elif reason == "deadStones were retired":
             labelReason.setText("Dead stones were taken off the board")
+            self.finished = True
 
-        layoutButtonsEnd.addWidget(buttonExit)
 
-        layout_end = QVBoxLayout()
-        layout_end.addWidget(labelEnd)
-        layout_end.addWidget(labelReason)
+        self.layoutEnd = QVBoxLayout()
+        self.layoutEnd.addWidget(labelEnd)
+        self.layoutEnd.addWidget(labelReason)
         if reason == "2 skips":
-            layout_end.addWidget(labelDeadStones)
-        """elif reason == "deadStones were retired":
-            labelDeadStones.hide()"""
+            self.layoutEnd.addWidget(labelDeadStones)
+        else:
+            layoutScore = QHBoxLayout()
+            layoutB = QVBoxLayout()
+            widgetB = QWidget()
+            widgetB.setStyleSheet("background-color: white ;color : black; border-radius: 15px")
+            layoutW = QVBoxLayout()
+            widgetW = QWidget()
+            widgetW.setStyleSheet("background-color: black ;color : white ;border-radius: 15px")
 
-        layout_end.addLayout(layoutButtonsEnd)
-        self.widgetEndGame.setLayout(layout_end)
+            """winner = QLabel("👑")
+            if self.logic.scoreW > self.logic.scoreB:
+                layoutW.addWidget(winner)
+            elif self.logic.scoreW < self.logic.scoreB:
+                layoutB.addWidget(winner)
+            else:
+                layoutB.addWidget(winner)
+                layoutW.addWidget(winner)
+            labelTerritoriB = QLabel("Black Territories : " + str(self.logic.territoriB))
+            layoutB.addWidget(labelTerritoriB)
+            labelScoreB = QLabel("Score : " + str(self.logic.scoreB))
+            layoutB.addWidget(labelScoreB)
+            layoutB.addWidget(labelTerritoriB)
+            labelTerritoriW = QLabel("White Territories : " + str(self.logic.territoriW))
+            layoutW.addWidget(labelTerritoriW)
+            labelScoreW = QLabel("Score : " + str(self.logic.scoreW))
+            layoutW.addWidget(labelScoreW)"""
+
+            widgetB.setLayout(layoutB)
+            widgetW.setLayout(layoutW)
+            layoutScore.addWidget(widgetB)
+            layoutScore.addWidget(widgetW)
+            self.layoutEnd.addLayout(layoutScore)
+
+
+        self.layoutEnd.addLayout(layoutButtonsEnd)
+        self.widgetEndGame.setLayout(self.layoutEnd)
 
         self.widgetEndGame.show()
 
@@ -235,8 +274,43 @@ class Board(QFrame):  # base the board on a QFrame widget
         gr.moveCenter(screen)
         self.widgetEndGame.move(gr.topLeft())
 
+    def buttonExitEvent(self):
+        self.exit.setWindowTitle("exit")
+        self.exit.setWindowIcon(QIcon("./assets/icon.png"))
+        self.exit.setStyleSheet("background-color:" + str(self.go.backgroundWindowColorhex) + "; color : " + str(self.go.textWindowColorhex))
+
+        exitLayout = QVBoxLayout()
+
+        # Text part
+        exitText = QLabel("Do you really want to exit the game? ")
+        exitLayout.addWidget(exitText)
+
+        buttonLay = QHBoxLayout()
+
+        buttonYes = QPushButton()
+        buttonYes.setText("Yes")
+        buttonYes.clicked.connect(self.exitEvent)
+        buttonLay.addWidget(buttonYes)
+
+        buttonNo = QPushButton()
+        buttonNo.setText("No")
+        buttonNo.clicked.connect(self.endExit)
+        buttonLay.addWidget(buttonNo)
+
+        exitLayout.addLayout(buttonLay)
+
+        self.exit.setLayout(exitLayout)
+        self.exit.show()
+
+        gr = self.exit.frameGeometry()
+        screen = self.go.screen().availableGeometry().center()
+        gr.moveCenter(screen)
+        self.exit.move(gr.topLeft())
     def exitEvent(self):
         sys.exit(self.go.app.exec())
+
+    def endExit(self):
+        self.exit.hide()
     def deadStoneEvent(self):
         self.widgetEndGame.hide()
         self.go.deadStonesEnd()
@@ -245,7 +319,7 @@ class Board(QFrame):  # base the board on a QFrame widget
 
         self.restart.setWindowTitle("restart")
         self.restart.setWindowIcon(QIcon("./assets/icon.png"))
-        self.restart.setStyleSheet("background-color:" + self.go.backgroundWindowColorhex)
+        self.restart.setStyleSheet("background-color:" + str(self.go.backgroundWindowColorhex) + "; color : " + str(self.go.textWindowColorhex))
 
         restartLayout = QVBoxLayout()
 
@@ -278,8 +352,6 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.restart.hide()
     def resetGame(self):
         '''clears pieces from the board'''
-        """if self.widgetEndGame.isVisible():
-            self.widgetEndGame.hide()"""
         if self.restart.isVisible():
             self.restart.hide()
 

@@ -1,4 +1,4 @@
-color1.txt => theme1
+color1.txt => Christmas
 color2.txt => theme2
-color3.txt => theme3
-color4.txt => theme4
+color3.txt => Cloudy
+color4.txt => Chocolate
