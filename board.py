@@ -24,6 +24,8 @@ class Board(QFrame):  # base the board on a QFrame widget
         super().__init__(parent)
         self.go = parent
         self.logic = logic
+
+        self.widgetEndGame = None
         self.initBoard()
 
     def initBoard(self):
@@ -295,7 +297,8 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.go.scoreBoard.setTimeBRemaining(self.counterB)
         self.go.scoreBoard.button_skipTurn.setText("Skip turn")
         self.go.scoreBoard.button_skipTurn.setStyleSheet("background-color:" + self.go.backgroundWindowColorhex)
-        self.widgetEndGame.setVisible(False)
+        if self.widgetEndGame is not None:
+            self.widgetEndGame.setVisible(False)
 
     def playablePosition(self,painter):
 

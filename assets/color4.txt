@@ -1,0 +1,9 @@
+backgroundBoardColor = #D4A06A
+backgroundWindowColor = #855E42
+backgroundMenuColor = #FFD5AA
+textWindowColor = #341A00
+textMenuColor = #855E42
+textPrisonColor = #341A00
+playableColor = #FFD5AA
+whiteStoneFile = WhiteStoneWood.png
+blackStoneFile = BlackStoneWood.png

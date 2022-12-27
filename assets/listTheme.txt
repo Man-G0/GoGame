@@ -1,2 +1,4 @@
 color1.txt => theme1
 color2.txt => theme2
+color3.txt => theme3
+color4.txt => theme4
