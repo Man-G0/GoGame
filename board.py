@@ -185,13 +185,14 @@ class Board(QFrame):  # base the board on a QFrame widget
 
     def endGame(self, reason):
         self.timer.stop()
+        self.skipnumber =0
+        self.logic.calcPoint()
 
         self.widgetEndGame = QWidget()
         self.widgetEndGame.setWindowIcon(QIcon("assets/icon.png"))
         self.widgetEndGame.setStyleSheet("background-color:" + str(self.go.backgroundWindowColorhex) + "; color : " + str(
             self.go.textWindowColorhex))
         self.widgetEndGame.setMinimumSize(250, 150)
-        self.logic.calcPoint()
         self.widgetEndGame.setWindowTitle("Game end")
         labelEnd = QLabel("The game has ended !")
         labelReason = QLabel()
@@ -215,10 +216,10 @@ class Board(QFrame):  # base the board on a QFrame widget
             labelReason.setText("Both players skipped their turn")
             layoutButtonsEnd.addWidget(buttonDeadStones)
         elif reason == "BNoTime":
-            labelReason.setText("Black has no time left")
+            labelReason.setText("Black has no time left. White wins")
             self.finished = True
         elif reason == "WNoTime":
-            labelReason.setText("White has no time left")
+            labelReason.setText("White has no time left. Black Wins.")
             self.finished = True
         elif reason == "deadStones were retired":
             labelReason.setText("Dead stones were taken off the board")
@@ -228,41 +229,63 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.layoutEnd = QVBoxLayout()
         self.layoutEnd.addWidget(labelEnd)
         self.layoutEnd.addWidget(labelReason)
+
+        layoutScore = QHBoxLayout()
+
+        layoutB = QVBoxLayout()
+        widgetB = QWidget()
+        widgetB.setStyleSheet("background-color: black ;color : white ;border-radius: 15px")
+
+        layoutW = QVBoxLayout()
+        widgetW = QWidget()
+        widgetW.setStyleSheet("background-color: white ;color : black; border-radius: 15px")
+
+        winner = QLabel("👑winner👑")
+        loser = QLabel("😣")
+        layloss = QHBoxLayout()
+        layloss.addStretch(1)
+        layloss.addWidget(loser)
+        layloss.addStretch(1)
+        laywin = QHBoxLayout()
+        laywin.addStretch(1)
+        laywin.addWidget(winner)
+        laywin.addStretch(1)
+
         if reason == "2 skips":
             self.layoutEnd.addWidget(labelDeadStones)
-        else:
-            layoutScore = QHBoxLayout()
-            layoutB = QVBoxLayout()
-            widgetB = QWidget()
-            widgetB.setStyleSheet("background-color: white ;color : black; border-radius: 15px")
-            layoutW = QVBoxLayout()
-            widgetW = QWidget()
-            widgetW.setStyleSheet("background-color: black ;color : white ;border-radius: 15px")
+        if reason == "deadStones were retired" or reason=="2 skips":
 
-            """winner = QLabel("👑")
             if self.logic.scoreW > self.logic.scoreB:
-                layoutW.addWidget(winner)
+                layoutW.addLayout(laywin)
+                layoutB.addLayout(layloss)
             elif self.logic.scoreW < self.logic.scoreB:
-                layoutB.addWidget(winner)
+                layoutB.addLayout(laywin)
+                layoutW.addLayout(layloss)
             else:
-                layoutB.addWidget(winner)
-                layoutW.addWidget(winner)
-            labelTerritoriB = QLabel("Black Territories : " + str(self.logic.territoriB))
-            layoutB.addWidget(labelTerritoriB)
-            labelScoreB = QLabel("Score : " + str(self.logic.scoreB))
-            layoutB.addWidget(labelScoreB)
-            layoutB.addWidget(labelTerritoriB)
-            labelTerritoriW = QLabel("White Territories : " + str(self.logic.territoriW))
-            layoutW.addWidget(labelTerritoriW)
-            labelScoreW = QLabel("Score : " + str(self.logic.scoreW))
-            layoutW.addWidget(labelScoreW)"""
+                layoutB.addLayout(laywin)
+                layoutW.addLayout(laywin)
+        elif reason == "WNoTime":
+            layoutB.addLayout(laywin)
+            layoutW.addLayout(layloss)
+        elif reason == "deadStones were retired":
+            layoutW.addLayout(laywin)
+            layoutB.addLayout(layloss)
 
-            widgetB.setLayout(layoutB)
-            widgetW.setLayout(layoutW)
-            layoutScore.addWidget(widgetB)
-            layoutScore.addWidget(widgetW)
-            self.layoutEnd.addLayout(layoutScore)
+        labelTerritoriB = QLabel("Black Territories : " + str(self.logic.territoriB))
+        layoutB.addWidget(labelTerritoriB)
+        labelScoreB = QLabel("Score : " + str(self.logic.scoreB))
+        layoutB.addWidget(labelScoreB)
 
+        labelTerritoriW = QLabel("White Territories : " + str(self.logic.territoriW))
+        layoutW.addWidget(labelTerritoriW)
+        labelScoreW = QLabel("Score : " + str(self.logic.scoreW))
+        layoutW.addWidget(labelScoreW)
+
+        widgetB.setLayout(layoutB)
+        widgetW.setLayout(layoutW)
+        layoutScore.addWidget(widgetB)
+        layoutScore.addWidget(widgetW)
+        self.layoutEnd.addLayout(layoutScore)
 
         self.layoutEnd.addLayout(layoutButtonsEnd)
         self.widgetEndGame.setLayout(self.layoutEnd)
@@ -362,6 +385,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.counterW = self.totalTime
         self.isStarted = False      # game is not currently started
         self.playGame = False
+        self.finished = False
         self.skipnumber = 0
         self.go.scoreBoard.labelTerritoriW.setText("White Territories : " + str(self.logic.territoriW))
         self.go.scoreBoard.labelTerritoriB.setText("Black Territories : " + str(self.logic.territoriB))

@@ -17,7 +17,6 @@ class Prison(QFrame):
 
         self.capturedWhite = QLabel(str(len(self.whiteList)))
         self.capturedBlack = QLabel(str(len(self.blackList)))
-        #self.capturedBlack.setStyleSheet("background-color : white")
 
         self.prisonLayout = QVBoxLayout()
         self.prisonLayout.addStretch(1)
