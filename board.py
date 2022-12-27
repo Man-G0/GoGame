@@ -294,6 +294,7 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.go.scoreBoard.setTimeBRemaining(self.counterB)
         self.go.scoreBoard.button_skipTurn.setText("Skip turn")
         self.go.scoreBoard.button_skipTurn.setStyleSheet("background-color:" + self.go.backgroundWindowColorhex)
+        self.widgetEndGame.setVisible(False)
 
     def playablePosition(self,painter):
 
