@@ -155,7 +155,6 @@ class GameLogic:
         return inPrevious
 
     def calcTerritori(self):
-        print('non')
         duplicate = self.duplicateGrid()
         for i in range(self.xSize):
             for j in range(self.ySize):
@@ -193,7 +192,6 @@ class GameLogic:
     def calcPoint(self):
 
         self.calcTerritori()
-        print('oui')
         self.scoreB = self.territoriB
         self.scoreW = self.territoriW
 
