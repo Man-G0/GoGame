@@ -1,9 +1,9 @@
-backgroundBoardColor = #FFE3C6
-backgroundWindowColor = #AF000D
-backgroundMenuColor = #FF8080
+backgroundBoardColor = #DBA253
+backgroundWindowColor = #D9E4FF
+backgroundMenuColor = #929DFF
 textWindowColor = #003333
 textMenuColor = #5E0603
 textPrisonColor = #2040A9
-playableColor = #D2A665
+playableColor = #D0EBFF
 whiteStoneFile = WhiteStone2.png
 blackStoneFile = BlackStone2.png
