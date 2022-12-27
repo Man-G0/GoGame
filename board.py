@@ -1,20 +1,18 @@
 import sys
-
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QFrame, QWidget, QVBoxLayout, QLabel, QGridLayout, QHBoxLayout, QSizePolicy, QPushButton
-from PyQt6.QtCore import Qt, QBasicTimer, pyqtSignal, QPointF, QPoint, QRect, QSize
-from PyQt6.QtGui import QPainter, QPixmap, QColor, QPen, QBrush, QCursor, QIcon
-from PyQt6.QtTest import QTest
-from piece import Piece
+from PyQt6.QtWidgets import QFrame, QWidget, QVBoxLayout, QLabel, QHBoxLayout, QPushButton
+from PyQt6.QtCore import Qt, QBasicTimer, pyqtSignal, QRect, QSize
+from PyQt6.QtGui import QPainter, QPixmap, QPen, QBrush, QCursor, QIcon
+
 
 class Board(QFrame):  # base the board on a QFrame widget
-    updateTimerBSignal = pyqtSignal(int) # signal sent when timer is updated
+    updateTimerBSignal = pyqtSignal(int)  # signal sent when timer is updated
     updateTimerWSignal = pyqtSignal(int)
-    clickLocationSignal = pyqtSignal(str) # signal sent when there is a new click location
+    clickLocationSignal = pyqtSignal(str)  # signal sent when there is a new click location
     updatePrison = pyqtSignal(str)
-    boardWidth  = 6    # board is 6 squares wide
+    boardWidth = 6    # board is 6 squares wide
     boardHeight = 6     # board is 6 squares high
-    timerSpeed  = 1000     # the timer updates every 1 second
+    timerSpeed = 1000     # the timer updates every 1 second
     totalTime = 120
     counterB = totalTime    # the number the counter will count down from
     counterW = totalTime
@@ -39,7 +37,6 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.restart = QWidget()
         self.exit = QWidget()
 
-
         if self.squareWidth() <= self.squareHeight():
             self.squareSide = self.squareWidth()
         else:
@@ -57,7 +54,6 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.go.cursor_white = QCursor(self.go.cursor_scaled_pix_white, -1, -1)
         self.go.cursor_black = QCursor(self.go.cursor_scaled_pix_black, -1, -1)
 
-
     def resizeEvent(self, event):
 
         if self.contentsRect().height() > self.contentsRect().width():
@@ -66,7 +62,7 @@ class Board(QFrame):  # base the board on a QFrame widget
             new_size = QtCore.QSize(self.contentsRect().height(), self.contentsRect().height())
         self.resize(new_size)
         self.go.scoreBoard.resize(QSize(self.go.scoreBoard.contentsRect().width(), self.contentsRect().height()))
-        if self.squareWidth()<=self.squareHeight():
+        if self.squareWidth() <= self.squareHeight():
             self.squareSide = self.squareWidth()
         else:
             self.squareSide = self.squareHeight()
@@ -158,7 +154,7 @@ class Board(QFrame):  # base the board on a QFrame widget
 
                 if (posX+self.squareSide * 0.3>colTransformation)&(posX-self.squareSide * 0.3<colTransformation)&(posY+self.squareSide * 0.3>rowTransformation)&(posY-self.squareSide * 0.3<rowTransformation):
                     if not self.isStarted and self.playGame:
-                        self.go.logic.removeDead(col,row)
+                        self.go.logic.removeDead(col, row)
                         self.go.cursor()
                     elif not self.playGame:
                         if self.listPlayable[col][row]:
@@ -329,11 +325,13 @@ class Board(QFrame):  # base the board on a QFrame widget
         screen = self.go.screen().availableGeometry().center()
         gr.moveCenter(screen)
         self.exit.move(gr.topLeft())
+
     def exitEvent(self):
         sys.exit(self.go.app.exec())
 
     def endExit(self):
         self.exit.hide()
+
     def deadStoneEvent(self):
         self.widgetEndGame.hide()
         self.go.deadStonesEnd()
@@ -371,8 +369,10 @@ class Board(QFrame):  # base the board on a QFrame widget
         screen = self.go.screen().availableGeometry().center()
         gr.moveCenter(screen)
         self.restart.move(gr.topLeft())
+
     def endRestart(self):
         self.restart.hide()
+
     def resetGame(self):
         '''clears pieces from the board'''
         if self.restart.isVisible():
@@ -396,14 +396,14 @@ class Board(QFrame):  # base the board on a QFrame widget
         if self.widgetEndGame is not None:
             self.widgetEndGame.setVisible(False)
 
-    def playablePosition(self,painter):
+    def playablePosition(self, painter):
 
         if self.logic.currentPlayer == "W":
             self.listPlayable = self.logic.findWPlayable()
         elif self.logic.currentPlayer == "B":
             self.listPlayable = self.logic.findBPlayable()
 
-        if self.squareWidth()<=self.squareHeight():
+        if self.squareWidth() <= self.squareHeight():
             self.squareSide = self.squareWidth()
         else:
             self.squareSide = self.squareHeight()
@@ -419,13 +419,12 @@ class Board(QFrame):  # base the board on a QFrame widget
                     rowTransformation = self.squareSide * 0.47 + self.squareSide * row
                     painter.drawEllipse(int(colTransformation), int(rowTransformation), 5,5)
 
-
     def drawBoardSquares(self, painter):
         '''draw all the square on the board'''
         self.brushSize = 3
         self.brushColor = Qt.GlobalColor.black
         painter.setPen(QPen(self.brushColor, self.brushSize))
-        painter.fillRect(QRect(0, 0, self.contentsRect().width(), self.contentsRect().height()),self.go.backgroundBoardColor)
+        painter.fillRect(QRect(0, 0, self.contentsRect().width(), self.contentsRect().height()), self.go.backgroundBoardColor)
 
         if self.squareWidth()<=self.squareHeight():
             self.squareSide = self.squareWidth()
@@ -440,8 +439,6 @@ class Board(QFrame):  # base the board on a QFrame widget
                 painter.drawRect(QRect(int(colTransformation),int(rowTransformation),int(self.squareSide),int(self.squareSide)))
                 painter.restore()
                 self.brushColor = self.go.backgroundBoardColor
-
-
 
     def drawPieces(self, painter):
         '''draw the prices on the board'''
@@ -466,7 +463,3 @@ class Board(QFrame):  # base the board on a QFrame widget
                         self.blackStone.scaled(QSize(int(self.squareSide), int(self.squareSide)))
                         painter.drawPixmap(piece, self.blackStone, image)
                 painter.restore()
-
-
-
-    

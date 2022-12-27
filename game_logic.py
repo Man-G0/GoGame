@@ -1,6 +1,7 @@
 from piece import Piece
 from empty import Empty
 
+
 class GameLogic:
     def __init__(self):
         self.xSize = 7
@@ -41,7 +42,7 @@ class GameLogic:
                         group += 1
                         pieceCheck.findLiberties(group, self.xSize, self.ySize, array)
 
-        groupLiberties=[0]*group
+        groupLiberties = [0]*group
 
         for i in range(self.xSize):
             for j in range(self.ySize):
@@ -195,10 +196,8 @@ class GameLogic:
         self.scoreB = self.territoriB
         self.scoreW = self.territoriW
 
-        self.scoreB -= len(self.bCaptured) + 6.5
-        self.scoreW -= len(self.wCaptured)
-        print("scoreB = " + str(self.scoreB))
-        print("scoreW = " + str(self.scoreW))
+        self.scoreB -= len(self.bCaptured)
+        self.scoreW -= len(self.wCaptured) + 6.5
 
     def removeDead(self, x, y):
         pieceCheck = self.piecesArray[x][y]

@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QFrame, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt6.QtGui import QPainter, QPixmap
 from PyQt6.QtCore import QRect, QSize
 
+
 class Prison(QFrame):
 
     def __init__(self, parent, board):
@@ -37,7 +38,6 @@ class Prison(QFrame):
         self.blackStone.scaled(QSize(self.size, self.size))
         self.board.updatePrison.connect(self.paintEvent)
 
-
     def resizeEvent(self, event):
         # Create a square base size of 10x10 and scale it to the new size
         # maintaining aspect ratio.
@@ -48,6 +48,7 @@ class Prison(QFrame):
     def paintEvent(self, event):
         painter = QPainter(self)
         self.drawPrison(painter)
+
     def drawPrison(self,painter):
 
         self.setMinimumSize(int(self.board.width()*2/5), self.board.height())

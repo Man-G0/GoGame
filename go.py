@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel, QVBoxLayout
-from PyQt6.QtCore import Qt, QPoint, QSize
-from PyQt6.QtGui import QCursor, QPixmap, QColor, QIcon, QPainter, QAction
+from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtGui import QColor, QIcon, QAction
 from board import Board
 from prison import Prison
 from game_logic import GameLogic
@@ -41,6 +41,7 @@ class Go(QMainWindow):
 
     def resizeEvent(self, event):
         self.scoreBoard.resize(QSize(self.scoreBoard.contentsRect().width(), self.board.contentsRect().height()))
+
     def initLogic(self):
         self.logic = GameLogic()
 
@@ -59,8 +60,6 @@ class Go(QMainWindow):
         self.scoreBoard = ScoreBoard(self.board)
 
         self.mainLayout = Layout(self.board, self.scoreBoard, self.prison)
-
-
 
         self.setCentralWidget(self.mainLayout)
 
@@ -91,18 +90,6 @@ class Go(QMainWindow):
         for theme in self.listTheme:
             themeMenu.addAction(theme.themeAction)
 
-
-        """contactAction = QAction(QIcon("./icons/support-icon.png"), "Contact us", self)
-        contactAction.setShortcut("Ctrl+*")
-        helpMenu.addAction(contactAction)
-        contactAction.triggered.connect(self.contact)
-
-        AboutUsAction = QAction(QIcon("./icons/dizzy-person.png"), "About us", self)
-        AboutUsAction.setShortcut("Ctrl+U")
-        helpMenu.addAction(AboutUsAction)
-        AboutUsAction.triggered.connect(self.about)"""
-
-
         self.resize(1000, 650)
         self.center()
         self.setWindowTitle('Go')
@@ -120,7 +107,6 @@ class Go(QMainWindow):
         screen = self.screen().availableGeometry().center()
         gr.moveCenter(screen)
         self.move(gr.topLeft())
-
 
     def rules(self):
         self.rulesWidget = QWidget()
@@ -193,15 +179,12 @@ class Go(QMainWindow):
         hBoxLabel9.addStretch(1)
         rulesLayout.addLayout(hBoxLabel9)
 
-
-
         #Text part of the rules
         rulesLink = QLabel()
         urlLink = "<a href=\"https://en.wikipedia.org/wiki/Rules_of_Go\">Click this link to go to the wikipedia page for the rules of GO </a>"
         rulesLink.setText(urlLink)
         rulesLink.setOpenExternalLinks(True)
         rulesLayout.addWidget(rulesLink)
-
 
         rulesText = QLabel()
         rulesText.setText("\t\tMay the best win")
@@ -222,6 +205,15 @@ class Go(QMainWindow):
         self.scoreBoard.button_skipTurn.setStyleSheet("background-color:"+self.playableColorhex)
 
     def getColorHex(self, txtName):
+        self.backgroundBoardColorhex = '#AF000D' #we put the basic color to be sure to have a color event if there is an issue in the txt
+        self.backgroundWindowColorhex = '#FFE3C6'
+        self.backgroundMenuColorhex = '#5E0603'
+        self.textWindowColorhex = '#2040A9'
+        self.textMenuColorhex = '#FF8080'
+        self.textPrisonColorhex = '#003333'
+        self.playableColorhex = '#D2A665'
+        self.whiteStoneFile = 'WhiteStone.png'
+        self.blackStoneFile = 'BlackStone.png'
         try :
             colortxt = open("assets/" + txtName, "r")
 
@@ -251,15 +243,6 @@ class Go(QMainWindow):
 
         except:
             print('error with ' + txtName)
-            self.backgroundBoardColorhex =  '#AF000D'
-            self.backgroundWindowColorhex =  '#FFE3C6'
-            self.backgroundMenuColorhex =  '#5E0603'
-            self.textWindowColorhex =  '#2040A9'
-            self.textMenuColorhex =  '#FF8080'
-            self.textPrisonColorhex =  '#003333'
-            self.playableColorhex =  '#D2A665'
-            self.whiteStoneFile = 'WhiteStone.png'
-            self.blackStoneFile = 'BlackStone.png'
 
     def getListTheme(self):
         try :

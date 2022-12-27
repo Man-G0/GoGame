@@ -11,10 +11,8 @@ class ScoreBoard(QWidget):
         '''initiates ScoreBoard UI'''
         self.board = board
         self.resize(200, 200)
-        self.center()
         self.setWindowTitle('ScoreBoard')
 
-        #self.go = Go()
         #create a widget to hold other widgets
         self.mainLayout = QVBoxLayout()
 
@@ -27,8 +25,6 @@ class ScoreBoard(QWidget):
         self.label_timeBRemaining = QLabel(str(int(self.board.counterB / 60))+" min "+str(self.board.counterB % 60)+" sec")
         self.pbarBRemaining = QProgressBar(self, textVisible=False)
 
-
-
         self.pbarBRemaining.setValue(100)
         self.labelTerritoriB = QLabel("Black Territories : " + str(self.board.logic.territoriB))
         layoutB = QVBoxLayout()
@@ -38,7 +34,6 @@ class ScoreBoard(QWidget):
         layoutB.addWidget(self.labelTerritoriB)
         self.widgetB.setLayout(layoutB)
         self.widgetB.setStyleSheet("background-color: black ;color : white ;border-radius: 15px")
-
 
         self.widgetW = QWidget()
         self.label_timeW = QLabel("Time left for white : ")
@@ -65,9 +60,6 @@ class ScoreBoard(QWidget):
         self.setLayout(self.mainLayout)
         self.show()
 
-    def center(self):
-        '''centers the window on the screen, you do not need to implement this method'''
-
     def make_connection(self, board):
         '''this handles a signal sent from the board class'''
         # when the clickLocationSignal is emitted in board the setClickLocation slot receives it
@@ -75,7 +67,6 @@ class ScoreBoard(QWidget):
         # when the updateTimerSignal is emitted in the board the setTimeRemaining slot receives it
         board.updateTimerBSignal.connect(self.setTimeBRemaining)
         board.updateTimerWSignal.connect(self.setTimeWRemaining)
-
 
     def clickUpdate(self, player):
         '''updates the label to show the click location'''
