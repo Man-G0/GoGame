@@ -10,6 +10,10 @@ from theme import Theme
 
 class Go(QMainWindow):
     def __init__(self, app):
+        '''
+        inti function
+        input : the app
+        '''
         super().__init__()
         self.app = app
         self.getListTheme()
@@ -23,8 +27,11 @@ class Go(QMainWindow):
         self.initLogic()
         self.initUI()
 
-
     def changeTheme(self, file):
+        '''
+        function to change the theme
+        input : the name of the file where is the color
+        '''
         self.getColorHex(file)
 
         self.backgroundBoardColor = QColor(self.backgroundBoardColorhex)
@@ -40,19 +47,21 @@ class Go(QMainWindow):
             self.prison.initStone()
 
     def resizeEvent(self, event):
+        '''
+        function to resize the scoreboard when the window is resized and keep it at the same height of the board
+        '''
         self.scoreBoard.resize(QSize(self.scoreBoard.contentsRect().width(), self.board.contentsRect().height()))
 
     def initLogic(self):
+        '''
+        function to create the game logic
+        '''
         self.logic = GameLogic()
 
-    def getBoard(self):
-        return self.board
-
-    def getScoreBoard(self):
-        return self.scoreBoard
-
     def initUI(self):
-        '''initiates application UI'''
+        '''
+        ifunction to nitiates the application UI
+        '''
         self.board = Board(self, self.logic)
         self.cursor()
         self.prison = Prison(self,self.board)
@@ -96,19 +105,27 @@ class Go(QMainWindow):
         self.show()
 
     def cursor(self):
+        '''
+        function to change the cursor each time we change the player
+        '''
         if self.logic.currentPlayer == "W":
             self.board.setCursor(self.cursor_white)
         elif self.logic.currentPlayer == "B":
             self.board.setCursor(self.cursor_black)
 
     def center(self):
-        '''centers the window on the screen'''
+        '''
+        function to centers the window on the screen
+        '''
         gr = self.frameGeometry()
         screen = self.screen().availableGeometry().center()
         gr.moveCenter(screen)
         self.move(gr.topLeft())
 
     def rules(self):
+        '''
+        function to display the rules
+        '''
         self.rulesWidget = QWidget()
         self.rulesWidget.setWindowTitle("rules")
         self.rulesWidget.setWindowIcon(QIcon("assets/rules-icon.png"))
@@ -201,10 +218,16 @@ class Go(QMainWindow):
         self.rulesWidget.move(gr.topLeft())
 
     def deadStonesEnd(self):
+        '''
+        function to change the skip button when we remove the stones
+        '''
         self.scoreBoard.button_skipTurn.setText("calculate scores")
         self.scoreBoard.button_skipTurn.setStyleSheet("background-color:"+self.playableColorhex)
 
     def getColorHex(self, txtName):
+        '''
+        function to have the color from the txt file
+        '''
         self.backgroundBoardColorhex = '#AF000D' #we put the basic color to be sure to have a color event if there is an issue in the txt
         self.backgroundWindowColorhex = '#FFE3C6'
         self.backgroundMenuColorhex = '#5E0603'
@@ -245,6 +268,9 @@ class Go(QMainWindow):
             print('error with ' + txtName)
 
     def getListTheme(self):
+        '''
+        function to read the listtheme.txt
+        '''
         try :
             themetxt = open("assets/listTheme.txt", "r")
             self.listTheme = []
@@ -260,7 +286,13 @@ class Go(QMainWindow):
 
 
 class Layout(QWidget):
+    '''
+    class to create the layout
+    '''
     def __init__(self, board, scoreBoard, prison):
+        '''
+        init function that create the layout
+        '''
         super().__init__()
 
         self.prisonSize = 1

@@ -1,5 +1,8 @@
 class Piece(object):
-    def __init__(self, color, x, y):  # constructor
+    def __init__(self, color, x, y):
+        '''
+        init function
+        '''
         self.color = color
         self.liberties = 0
         self.x = x
@@ -7,6 +10,12 @@ class Piece(object):
         self.group = 0
 
     def findLiberties(self, group, xSize, ySize, piecesArray):
+        '''
+        function to find the liberties with a recursive method
+        input : x and y size of the board
+                group of the piece sapce
+                the array of all the pieces of the board
+        '''
         self.liberties = 0
         self.group = group
         if self.x != 0:

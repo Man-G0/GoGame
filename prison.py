@@ -6,6 +6,9 @@ from PyQt6.QtCore import QRect, QSize
 class Prison(QFrame):
 
     def __init__(self, parent, board):
+        '''
+        init function
+        '''
         super().__init__(parent)
 
         self.go = parent
@@ -31,6 +34,9 @@ class Prison(QFrame):
         self.setLayout(self.prisonLayout)
 
     def initStone(self):
+        '''
+        function that import the stones assets
+        '''
         self.whiteStone = QPixmap("assets/" + self.go.whiteStoneFile)
         self.size = int(self.contentsRect().width() / 4)
         self.whiteStone.scaled(QSize(self.size, self.size))
@@ -39,6 +45,9 @@ class Prison(QFrame):
         self.board.updatePrison.connect(self.paintEvent)
 
     def resizeEvent(self, event):
+        '''
+        function for the resize of the prison
+        '''
         # Create a square base size of 10x10 and scale it to the new size
         # maintaining aspect ratio.
         new_size = QSize(int(self.board.width()*2/5), self.board.contentsRect().height())
@@ -46,11 +55,16 @@ class Prison(QFrame):
         self.size = int(self.contentsRect().width() / 4)
 
     def paintEvent(self, event):
+        '''
+        function paint event
+        '''
         painter = QPainter(self)
         self.drawPrison(painter)
 
     def drawPrison(self,painter):
-
+        '''
+        function to draw the prison
+        '''
         self.setMinimumSize(int(self.board.width()*2/5), self.board.height())
         prisonWidth = self.width()
         prisonHeight = self.height()

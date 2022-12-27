@@ -19,6 +19,11 @@ class Board(QFrame):  # base the board on a QFrame widget
     cursorCoef = 0.9
 
     def __init__(self, parent, logic):
+        '''
+        init function
+        input : parent instance (go)
+                logic instance
+        '''
         super().__init__(parent)
         self.go = parent
         self.logic = logic
@@ -27,6 +32,10 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.initBoard()
 
     def initBoard(self):
+        '''
+        init function
+        with the initiation of var
+        '''
         '''initiates board'''
         self.timer = QBasicTimer()  # create a timer for the game
         self.isStarted = False      # true if the players are currently playing, false if the game hasn't started yet, or after a double skip/endgame
@@ -45,6 +54,10 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.initCursor()
 
     def initCursor(self):
+        '''
+        init function for the cursor
+        can be recall if we change the cursor
+        '''
         self.whiteStone = QPixmap("assets/" + self.go.whiteStoneFile)
         self.whiteStone.scaled(QSize(int(self.squareSide), int(self.squareSide)))
         self.blackStone = QPixmap("assets/" + self.go.blackStoneFile)
@@ -55,6 +68,9 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.go.cursor_black = QCursor(self.go.cursor_scaled_pix_black, -1, -1)
 
     def resizeEvent(self, event):
+        '''
+        function execute when there is a resize of the board
+        '''
 
         if self.contentsRect().height() > self.contentsRect().width():
             new_size = QtCore.QSize(self.contentsRect().width(), self.contentsRect().width())
@@ -77,21 +93,29 @@ class Board(QFrame):  # base the board on a QFrame widget
 
 
     def squareWidth(self):
-        '''returns the width of one square in the board'''
+        '''
+        function to calculate the width of one square in the board
+        '''
         return (self.contentsRect().width()-(self.contentsRect().width()/self.boardWidth))/self.boardWidth
 
     def squareHeight(self):
-        '''returns the height of one square of the board'''
+        '''
+        function to calculate the height of one square of the board
+        '''
         return (self.contentsRect().height()-(self.contentsRect().height()/self.boardHeight)) / self.boardHeight
 
     def start(self):
-        '''starts game'''
+        '''
+        function to starts the game
+        '''
         self.isStarted = True                       # set the boolean which determines if the game has started to TRUE
         self.timer.start(self.timerSpeed, self)     # start the timer with the correct speed
         self.clickLocationSignal.emit(self.logic.currentPlayer)
 
     def timerEvent(self, event):
-        '''this event is automatically called when the timer is updated. based on the timerSpeed variable '''
+        '''
+        this event is automatically called when the timer is updated. based on the timerSpeed variable
+        '''
         if event.timerId() == self.timer.timerId():  # if the timer that has 'ticked' is the one in this class
             if self.logic.currentPlayer == "B":
                 if self.counterB == 0:
@@ -108,7 +132,11 @@ class Board(QFrame):  # base the board on a QFrame widget
         else:
             super(Board, self).timerEvent(event)      # if we do not handle an event we should pass it to the super
                                                         # class for handling
+
     def skipTurn(self):
+        '''
+        function to call when there is a skip of a turn
+        '''
         if self.finished:
             pass
         else:
@@ -129,14 +157,19 @@ class Board(QFrame):  # base the board on a QFrame widget
 
 
     def paintEvent(self, event):
-        '''paints the board and the pieces of the game'''
+        '''
+        paints the board and the pieces of the game
+        '''
         painter = QPainter(self)
         self.drawBoardSquares(painter)
         self.playablePosition(painter)
         self.drawPieces(painter)
 
     def mousePressEvent(self, event):
-        '''this event is automatically called when the mouse is pressed'''
+        '''
+        this event is automatically called when the mouse is pressed
+        it check if the stone can be placed
+        '''
         posX = event.position().x()
         posY = event.position().y()
         if self.squareWidth() <= self.squareHeight():
@@ -180,6 +213,10 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.clickLocationSignal.emit(self.logic.currentPlayer)
 
     def endGame(self, reason):
+        '''
+        function called at the end of the game
+        take in input the reason of this end (2 skips, BNoTime, WNoTime, deadStones were retired)
+        '''
         self.timer.stop()
         self.skipnumber =0
         self.logic.calcPoint()
@@ -294,6 +331,9 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.widgetEndGame.move(gr.topLeft())
 
     def buttonExitEvent(self):
+        '''
+        function of the exit button
+        '''
         self.exit.setWindowTitle("exit")
         self.exit.setWindowIcon(QIcon("./assets/icon.png"))
         self.exit.setStyleSheet("background-color:" + str(self.go.backgroundWindowColorhex) + "; color : " + str(self.go.textWindowColorhex))
@@ -327,16 +367,28 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.exit.move(gr.topLeft())
 
     def exitEvent(self):
+        '''
+        function to close the application
+        '''
         sys.exit(self.go.app.exec())
 
     def endExit(self):
+        '''
+        function to hide the end window
+        '''
         self.exit.hide()
 
     def deadStoneEvent(self):
+        '''
+        function of the dead stone button
+        '''
         self.widgetEndGame.hide()
         self.go.deadStonesEnd()
 
     def buttonRestartEvent(self):
+        '''
+        function of the restart button
+        '''
 
         self.restart.setWindowTitle("restart")
         self.restart.setWindowIcon(QIcon("./assets/icon.png"))
@@ -371,10 +423,15 @@ class Board(QFrame):  # base the board on a QFrame widget
         self.restart.move(gr.topLeft())
 
     def endRestart(self):
+        '''
+        function to hide the restart verification
+        '''
         self.restart.hide()
 
     def resetGame(self):
-        '''clears pieces from the board'''
+        '''
+        function to clears the pieces from the board and reset other variable
+        '''
         if self.restart.isVisible():
             self.restart.hide()
 
@@ -397,7 +454,9 @@ class Board(QFrame):  # base the board on a QFrame widget
             self.widgetEndGame.setVisible(False)
 
     def playablePosition(self, painter):
-
+        '''
+        function to draw the playable position
+        '''
         if self.logic.currentPlayer == "W":
             self.listPlayable = self.logic.findWPlayable()
         elif self.logic.currentPlayer == "B":
@@ -420,7 +479,9 @@ class Board(QFrame):  # base the board on a QFrame widget
                     painter.drawEllipse(int(colTransformation), int(rowTransformation), 5,5)
 
     def drawBoardSquares(self, painter):
-        '''draw all the square on the board'''
+        '''
+        draw all the square on the board
+        '''
         self.brushSize = 3
         self.brushColor = Qt.GlobalColor.black
         painter.setPen(QPen(self.brushColor, self.brushSize))
@@ -441,8 +502,9 @@ class Board(QFrame):  # base the board on a QFrame widget
                 self.brushColor = self.go.backgroundBoardColor
 
     def drawPieces(self, painter):
-        '''draw the prices on the board'''
-
+        '''
+        draw the prices on the board
+        '''
         if self.squareWidth()<=self.squareHeight():
             self.squareSide = self.squareWidth()
         else:

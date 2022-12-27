@@ -1,11 +1,21 @@
 class Empty(object):
     def __init__(self, x, y):
+        '''
+        init function
+        input : X and Y position
+        '''
         self.x = x
         self.y = y
         self.group = 0
         self.colorNear = []
 
     def calcGroup(self, xSize, ySize, group, piecesArray):
+        '''
+        function to calcul the neighbour of the empty space
+        input : x and y size of the board
+                group of the empty sapce
+                the array of all the pieces of the board
+        '''
         self.group = group
         if self.x != 0:
             if type(piecesArray[self.x-1][self.y]) == Empty:

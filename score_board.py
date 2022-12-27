@@ -4,11 +4,16 @@ from PyQt6.QtCore import pyqtSlot
 
 class ScoreBoard(QWidget):
     def __init__(self, board):
+        '''
+        init function
+        '''
         super().__init__()
         self.initUI(board)
 
     def initUI(self, board):
-        '''initiates ScoreBoard UI'''
+        '''
+        function that initiates the ScoreBoard UI
+        '''
         self.board = board
         self.resize(200, 200)
         self.setWindowTitle('ScoreBoard')
@@ -61,7 +66,9 @@ class ScoreBoard(QWidget):
         self.show()
 
     def make_connection(self, board):
-        '''this handles a signal sent from the board class'''
+        '''
+        function that handles a signal sent from the board class
+        '''
         # when the clickLocationSignal is emitted in board the setClickLocation slot receives it
         board.clickLocationSignal.connect(self.clickUpdate)
         # when the updateTimerSignal is emitted in the board the setTimeRemaining slot receives it
@@ -69,7 +76,9 @@ class ScoreBoard(QWidget):
         board.updateTimerWSignal.connect(self.setTimeWRemaining)
 
     def clickUpdate(self, player):
-        '''updates the label to show the click location'''
+        '''
+        function that change the player turn label
+        '''
         if player == 'W':
             self.label_playerTurn.setText("Turn to player White")
         elif player == 'B':
@@ -77,7 +86,9 @@ class ScoreBoard(QWidget):
 
     @pyqtSlot(int)
     def setTimeBRemaining(self, timeBRemaining):
-        '''updates the time remaining label to show the time remaining'''
+        '''
+        function to updates the time remaining label to show the time remaining for the black
+        '''
         self.label_timeBRemaining.setText(str(int(timeBRemaining / 60))+" min "+str(timeBRemaining % 60)+" sec")
         val = int((timeBRemaining / self.board.totalTime) * 100)
         self.pbarBRemaining.setValue(val)
@@ -88,7 +99,9 @@ class ScoreBoard(QWidget):
 
     @pyqtSlot(int)
     def setTimeWRemaining(self, timeWRemaining):
-        '''updates the time remaining label to show the time remaining'''
+        '''
+        function to updates the time remaining label to show the time remaining for the white
+        '''
         self.label_timeWRemaining.setText(str(int(timeWRemaining / 60))+" min "+str(timeWRemaining % 60)+" sec")
         val = int((timeWRemaining / self.board.totalTime)*100)
         self.pbarWRemaining.setValue(val)

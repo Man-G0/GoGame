@@ -4,6 +4,9 @@ from empty import Empty
 
 class GameLogic:
     def __init__(self):
+        '''
+        init function
+        '''
         self.xSize = 7
         self.ySize = 7
         self.bCaptured = []
@@ -18,15 +21,26 @@ class GameLogic:
         self.territoriW = 0
 
     def addPiece(self, color, x, y):
+        '''
+        function to add a piece
+        input : the color and the position of the piece
+        '''
         self.piecesArray[x][y] = Piece(color, x, y)
         self.lastGrid .append(self.duplicateGrid())
         self.calcLiberties()
         self.removeCapture(color)
 
     def calcLiberties(self):
+        '''
+        function to calculate the liberties in the current board
+        '''
         self.calcLibertiesVar(self.piecesArray)
 
     def calcLibertiesVar(self, array):
+        '''
+        function to calculate the liberties of a board
+        inout : the board where we want to calculate the liberties
+        '''
         group = 0
         for i in range(self.xSize):
             for j in range(self.ySize):
@@ -57,6 +71,10 @@ class GameLogic:
                     pieceCheck.liberties = groupLiberties[pieceCheck.group-1]
 
     def removeCapture(self, color):
+        '''
+        function to remove the piece with no liberties and put them in prison
+        input : the color of the player playing
+        '''
         for i in range(self.xSize):
             for j in range(self.ySize):
                 pieceCheck = self.piecesArray[i][j]
@@ -70,6 +88,9 @@ class GameLogic:
                             self.piecesArray[i][j] = None
 
     def findBPlayable(self):
+        '''
+        function to find where the black player can play
+        '''
         self.bPlayable = []
         for i in range(self.xSize):
             yArray = [None] * self.ySize
@@ -78,6 +99,9 @@ class GameLogic:
         return self.bPlayable
 
     def findWPlayable(self):
+        '''
+        function to find where the white player can play
+        '''
         self.wPlayable = []
         for i in range(self.xSize):
             yArray = [None] * self.ySize
@@ -86,6 +110,10 @@ class GameLogic:
         return self.wPlayable
 
     def findPlayable(self, color, playableArray):
+        '''
+        function to find where a player can play$
+        input : the color of the player and the list of all pieces
+        '''
         for i in range(self.xSize):
             for j in range(self.ySize):
                 if self.piecesArray[i][j] is not None:
@@ -120,6 +148,9 @@ class GameLogic:
                         playableArray[i][j] = playable
 
     def duplicateGrid(self):
+        '''
+        function to create a duplicate grid from the current one
+        '''
         duplicatedArray = []
         for i in range(self.xSize):
             yArray = []
@@ -132,6 +163,9 @@ class GameLogic:
         return duplicatedArray
 
     def compareGrid(self, grid1, grid2):
+        '''
+        function to compare two grid and see if there are the same
+        '''
         same = True
         i = 0
         while i < self.xSize and same:
@@ -147,6 +181,9 @@ class GameLogic:
         return same
 
     def checkPreviousGrid(self, gridToCheck):
+        '''
+        function to see if a grid is in the list of the last grid
+        '''
         inPrevious = False
         i = len(self.lastGrid)-1
         while i >= 0 and not inPrevious:
@@ -156,6 +193,9 @@ class GameLogic:
         return inPrevious
 
     def calcTerritori(self):
+        '''
+        function to calcul the territories of the two player
+        '''
         duplicate = self.duplicateGrid()
         for i in range(self.xSize):
             for j in range(self.ySize):
@@ -191,6 +231,9 @@ class GameLogic:
                         self.territoriW += 1
 
     def calcPoint(self):
+        '''
+        function to calcul the score of the two player
+        '''
         self.calcTerritori()
 
         self.scoreB = self.territoriB
@@ -200,6 +243,10 @@ class GameLogic:
         self.scoreW -= len(self.wCaptured) + 6.5
 
     def removeDead(self, x, y):
+        '''
+        function to remove the dead stone
+        input : the position of the stone
+        '''
         pieceCheck = self.piecesArray[x][y]
         if pieceCheck is None:
             return False
@@ -212,5 +259,3 @@ class GameLogic:
                 self.wCaptured.append(pieceCheck)
                 self.piecesArray[x][y] = None
                 return True
-
-
